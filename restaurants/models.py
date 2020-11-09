@@ -23,7 +23,7 @@ class Food(models.Model):
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, verbose_name="Restauracja:")  # Klucz obcy do modelu restauracja
 
     def __str__(self):  # metoda do wyświetlania obiektu w django admin, dodajemy zł do pola ceny
-        return '{} {} {} {] zł'.format(self.name, self.category, self. restaurant, self.price)
+        return '{} {} {} {} zł'.format(self.name, self.category, self. restaurant, self.price)
 
 
 
