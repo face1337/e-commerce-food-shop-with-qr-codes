@@ -19,3 +19,4 @@ class Order(models.Model):
     restaurant = models.ForeignKey(Restaurant)
     date = models.DateTimeField(default=timezone.now)
     order_status = models.CharField(max_length=2, choices=OrderStatus.choices, default=OrderStatus.NONE)
+    # delivery_time = models.TimeField(verbose_name="Czas dostawy: ")  # not sure if needed
