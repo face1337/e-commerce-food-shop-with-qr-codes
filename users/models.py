@@ -1,19 +1,16 @@
 from django.db import models
 from django.contrib.auth.models import User
-from qr_code.qrcode.utils import Coordinates
-from qr_code.qrcode import *
+import qrcode
+from PIL import Image
 from io import BytesIO
 from django.core.files import File
-from PIL import Image
-import segno
 from geopy.geocoders import Nominatim
-from qr_code.templatetags.qr_code import qr_for_google_maps
 
 
 class Profile(models.Model):
     name = models.OneToOneField(User, on_delete=models.CASCADE)
     address = models.CharField("Adres (Ulica nr domu/mieszkania, miejscowość, kraj:", max_length=255)
-    qr_code = models.ImageField(upload_to='qr_codes', blank=True, max_length=1000)
+    qr_code = models.ImageField(upload_to='qr_codes', blank=True, max_length=3000)
 
     def __str__(self):
         return 'Profil użytkownika: {}'.format(self.name)
@@ -28,20 +25,19 @@ class Profile(models.Model):
         return location
 
     def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
+        latitude = self.get_coordinates().latitude
+        longitude = self.get_coordinates().longitude
 
-        google_maps_coordinates = Coordinates(latitude=self.get_coordinates().latitude,
-                                              longitude=self.get_coordinates().longitude)
-
-        qr_code_img = qr_for_google_maps(coordinates=google_maps_coordinates)
+        qr_code_img = qrcode.make('https://www.google.pl/maps/plaaddce/{},{}'.format(latitude, longitude))
+        img = Image.new('RGB', (qr_code_img.pixel_size, qr_code_img.pixel_size), color='white')
+        img.paste(qr_code_img)
         fname = f'qr-{self.name}.png'
-        self.qr_code.save(qr_code_img, fname, save=False)
-        """
-        To powyżej nie działa, dostaje error - "SuspiciousFileOperation at /admin/users/profile/7/change/
-        Storage can not find an available filename for... "
-        Zwiększone max_length dla qr_code ale nadal się to dzieje.
-        """
-        # img.close()
+        buffer = BytesIO()
+        img.save(buffer, 'PNG')
+        self.qr_code.save(fname, File(buffer), save=False)
+        img.close()
+
+        super().save(*args, **kwargs)
 
 
 
