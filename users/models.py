@@ -28,7 +28,7 @@ class Profile(models.Model):
         latitude = self.get_coordinates().latitude
         longitude = self.get_coordinates().longitude
 
-        qr_code_img = qrcode.make('https://www.google.pl/maps/plaaddce/{},{}'.format(latitude, longitude))
+        qr_code_img = qrcode.make('https://www.google.pl/maps/place/{},{}'.format(latitude, longitude))
         img = Image.new('RGB', (qr_code_img.pixel_size, qr_code_img.pixel_size), color='white')
         img.paste(qr_code_img)
         fname = f'qr-{self.name}.png'
