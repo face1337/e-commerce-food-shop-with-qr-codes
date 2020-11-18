@@ -16,7 +16,7 @@ class Order(models.Model):
         COMPLETED = 'ZREALIZOWANE', _('Zamówienie zrealizowane')
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Użytkownik:")
-    restaurant = models.ForeignKey(Restaurant)
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, verbose_name="Restauracja:")
     date = models.DateTimeField(default=timezone.now)
-    order_status = models.CharField(max_length=2, choices=OrderStatus.choices, default=OrderStatus.NONE)
+    order_status = models.CharField(max_length=15, choices=OrderStatus.choices, default=OrderStatus.NONE)
     # delivery_time = models.TimeField(verbose_name="Czas dostawy: ")  # not sure if needed

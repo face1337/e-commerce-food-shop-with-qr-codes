@@ -9,7 +9,7 @@ from geopy.geocoders import Nominatim
 
 class Profile(models.Model):
     name = models.OneToOneField(User, on_delete=models.CASCADE)
-    address = models.CharField("Adres (Ulica nr domu/mieszkania, miejscowość, kraj:", max_length=255)
+    address = models.CharField("Adres (Ulica nr domu/mieszkania, miejscowość, kraj:", max_length=255, default='adres')
     qr_code = models.ImageField(upload_to='qr_codes', blank=True, max_length=3000)
 
     def __str__(self):

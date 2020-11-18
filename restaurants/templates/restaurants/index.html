@@ -1,0 +1,8 @@
+{% extends 'restaurants/base.html' %}
+{% block content %}
+    {% for restaurant in restaurants %}
+        <article class="media content-section">
+            <a class="article-title" href="{% url 'restaurant-detail' restaurant.slug %}">{{ restaurant.name }}</a>
+        </article>
+    {% endfor %}
+{% endblock %}
