@@ -2,7 +2,15 @@
 {% block content %}
     {% for restaurant in restaurants %}
         <article class="media content-section">
-            <a class="article-title" href="{% url 'restaurant-detail' restaurant.slug %}">{{ restaurant.name }}</a>
+        <div class="media-body">
+            <h2>
+                <a class="article-title" href="{% url 'restaurant-foods' restaurant.slug %}">{{ restaurant.name }}</a>
+            </h2>
+                <div class="article-content">
+                    {{ restaurant.address }}
+                </div>
+        </div>
+
         </article>
     {% endfor %}
 {% endblock %}

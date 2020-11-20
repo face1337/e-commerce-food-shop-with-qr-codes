@@ -1,0 +1,16 @@
+{% extends 'restaurants/base.html' %}
+{% block content %}
+    <article class="media content-section">
+        <div class="media-body">
+        {% for food in foods %}
+            {% if forloop.first %} <!-- display restaurant name only once -->
+                <h1>{{ food.restaurant.name }}</h1>
+            {% endif %}
+                <div class="article-content">
+                    {{ food.name }}
+                </div>
+        {% endfor %}
+        </div>
+
+    </article>
+{% endblock %} %}
