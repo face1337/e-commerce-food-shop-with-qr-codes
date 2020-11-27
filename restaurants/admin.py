@@ -1,6 +1,25 @@
 from django.contrib import admin
-from . models import Food, Restaurant, Category
+from django.utils.html import format_html
 
-admin.site.register(Food)
-admin.site.register(Restaurant)
+from . models import Food, FoodImage, Restaurant, Category
+
 admin.site.register(Category)
+admin.site.register(FoodImage)
+
+
+class FoodAdmin(admin.ModelAdmin):
+    list_display = ('name', 'slug', 'restaurant', 'price')
+    search_fields = ('name',)
+    prepopulated_fields = {"slug": ("name", )}
+
+
+admin.site.register(Food, FoodAdmin)
+
+
+class RestaurantAdmin(admin.ModelAdmin):
+    list_display = ('name', 'address', 'slug')
+    search_fields = ('name', 'address')
+    prepopulated_fields = {"slug": ("name", )}
+
+
+admin.site.register(Restaurant, RestaurantAdmin)

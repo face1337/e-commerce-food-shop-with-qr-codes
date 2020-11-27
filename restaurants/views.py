@@ -7,17 +7,8 @@ from .models import Restaurant, Food, Category
 def index(request):
     context = {
         'restaurants': Restaurant.objects.all(),
-        #'foods': Food.objects.all(),
     }
     return render(request, 'restaurants/index.html', context)
-
-
-class RestaurantListView(ListView):
-    model = Restaurant
-
-
-'''class RestaurantDetailView(DetailView):
-    model = Restaurant'''
 
 
 class FoodRestaurantListView(ListView):
@@ -32,3 +23,8 @@ class FoodRestaurantListView(ListView):
 
 class FoodDetailView(DetailView):
     model = Food
+
+    '''def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context'''
+

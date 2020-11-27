@@ -1,16 +1,23 @@
 {% extends 'restaurants/base.html' %}
 {% block content %}
+
     <article class="media content-section">
         <div class="media-body">
+        {{ foods.category.name }}
         {% for food in foods %}
             {% if forloop.first %} <!-- display restaurant name only once -->
                 <h1>{{ food.restaurant.name }}</h1>
             {% endif %}
-                <div class="article-content">
-                    {{ food.name }}
-                </div>
+                {% comment TODO: show category of a meal, only once %}
+                {% endcomment %}
+                <p>
+                    Kategoria: {{ food.category }}
+                    <strong>
+                        <a href="{% url 'food-detail' food.slug %}">{{ food.name }}</a>
+                    </strong>
+                    <i> {{ food.price }}</i>
+                </p>
         {% endfor %}
         </div>
-
     </article>
 {% endblock %} %}
