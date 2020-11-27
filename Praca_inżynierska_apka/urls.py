@@ -17,11 +17,13 @@ from django.contrib import admin
 from django.urls import include, path
 from django.conf.urls.static import static
 from django.conf import settings
+from users import views as user_views
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('restaurants.urls')),  # mapowanie urlsow z aplikacja
+    path('register/', user_views.RegisterView.as_view(), name='users-register'),
 ]
 
 if settings.DEBUG:

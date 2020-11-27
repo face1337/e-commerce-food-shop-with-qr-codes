@@ -15,4 +15,26 @@ class RegisterView(FormView):
     form_class = forms.UserCreationForm
 
     def get_success_url(self):
-        redirect_to = self.request.GET.get("")
+        redirect_to = self.request.GET.get("next", "/")
+        return redirect_to
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        form.save()
+        email = form.cleaned_data.get("email")
+        raw_password = form.cleaned_data.get("password1")
+        logger.info(
+            "Nowa rejestracja dla adresu email={} przy użyciu RegistrationView", email
+        )
+
+        user = authenticate(email=email, password=raw_password)
+        login(self.request, user)
+
+        form.send_mail()
+
+        messages.info(
+            self.request, "Zarejestrowano pomyślnie."
+        )
+
+        return response
+

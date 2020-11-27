@@ -11,7 +11,7 @@
                 {% comment TODO: show category of a meal, only once %}
                 {% endcomment %}
                 <p>
-                    Kategoria: {{ food.category }}
+                    Kategoria: {{ category.name }}
                     <strong>
                         <a href="{% url 'food-detail' food.slug %}">{{ food.name }}</a>
                     </strong>
