@@ -23,8 +23,8 @@ class FoodRestaurantListView(ListView):
 
 class FoodDetailView(DetailView):
     model = Food
+    template_name = 'restaurants/food_detail.html'
+    context_object_name = 'food_detail'
 
-    '''def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context'''
+
 

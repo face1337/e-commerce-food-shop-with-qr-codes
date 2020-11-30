@@ -1,15 +1,17 @@
 {% extends 'restaurants/base.html' %}
 {% block content %}
+    <h1>{{ food_detail.name }}</h1>
+    <p>Cena: {{ food_detail.price }} zł</p>
+    {% for category in food_detail.category.all %}
+        <strong>{{ category }}</strong>
+    {% endfor %}
 
-    <h1>{{ object.name }}</h1>
-    <p>Cena: {{ object.price }} zł</p>
-    <strong>{{ object.category.name }}</strong>
     <p>
     {% for image in object.foodimage_set.all%}
         <img src="{{ image.thumbnail.url }}" alt="FoodImage">
     {% endfor %}
     </p>
     <span>
-        <a href="{% url 'restaurant-foods' food.restaurant.slug %}">Powrót</a>
+        <a href="{% url 'restaurant-foods' object.restaurant.slug %}">Powrót</a>
     </span>
 {% endblock %}

@@ -7,7 +7,7 @@ from . import models
 
 
 class ProfileAdmin(admin.ModelAdmin):
-    readonly_fields = ('address1',)
+    readonly_fields = ('address1', 'country',)
 
 
 admin.site.register(models.Profile, ProfileAdmin)

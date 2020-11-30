@@ -10,13 +10,21 @@
                 {% comment TODO: show category of a meal, only once %}
                 {% endcomment %}
                 <p>
-                    Kategoria: {{ food.category.name }}
+                    Kategoria:
+                    {% for category in food.category.all %}
+                        {{ category }}
+                    {% endfor %}
+                <hr>
                     <strong>
                         <a href="{% url 'food-detail' food.slug %}">{{ food.name }}</a>
                     </strong>
-                    <i> {{ food.price }}</i>
+                <br>
+                    Cena:<i> {{ food.price }}</i>
                 </p>
         {% endfor %}
+        <br>
+        <hr>
+        <a href="{% url 'restaurants-index' %}">Powrót</a>
         </div>
     </article>
 {% endblock %} %}
