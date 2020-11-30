@@ -35,10 +35,10 @@
                 {% if user.is_superuser %}
                     <a class="nav-item nav-link" href="{% url 'admin:index' %}">Panel administracyjny</a>
                 {% endif %}
-              <a class="nav-item nav-link" href="#">Wyloguj się</a>
+              <a class="nav-item nav-link" href="{% url 'users-logout' %}">Wyloguj się</a>
               <a class="nav-item nav-link" href="#"><img class="rounded-circle article-svg" src="#">Profil</a>
             {% else %}
-              <a class="nav-item nav-link" href="#">Logowanie</a>
+              <a class="nav-item nav-link" href="{% url 'users-login' %}">Logowanie</a>
               <a class="nav-item nav-link" href="{% url 'users-register' %}">Rejestracja</a>
             {% endif %}
             </div>

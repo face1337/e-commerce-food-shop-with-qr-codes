@@ -5,7 +5,12 @@ from . import models
 
 # Register your models here.
 
-admin.site.register(models.Profile)
+
+class ProfileAdmin(admin.ModelAdmin):
+    readonly_fields = ('address1',)
+
+
+admin.site.register(models.Profile, ProfileAdmin)
 
 
 @admin.register(models.User)

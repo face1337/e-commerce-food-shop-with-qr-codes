@@ -57,20 +57,29 @@ class User(AbstractUser):
 
 
 class Profile(models.Model):
-    name = models.ForeignKey(User, on_delete=models.CASCADE)
-    address = models.CharField("Adres (Ulica nr domu/mieszkania, miejscowość, kraj:", max_length=255, default='adres')
+    COUNTRY = "Polska"
+    name = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Użytkownik:")
+    # address = models.CharField("Adres (Ulica nr domu/mieszkania, miejscowość, kraj:", max_length=255, default='adres')
+    address1 = models.CharField("Miasto:",max_length=60, default='Kraków', editable=False)
+    address2 = models.CharField("Ulica:", max_length=60, default='ulica')
+    house_number = models.CharField("Nr bloku/domu:", max_length=60, default='0')
+    flat_number = models.CharField("Nr mieszkania:", max_length=60, blank=True)
+    country = models.CharField(max_length=60, default=COUNTRY)
     qr_code = models.ImageField(upload_to='qr_codes', blank=True, max_length=3000)
 
     def __str__(self):
         return 'Profil użytkownika: {}'.format(self.name)
+
+    def get_address(self):
+        return '{}, {} {}, {}'.format(self.address1, self.address2, self.house_number, self.country)
 
     def get_coordinates(self):
         '''
         Convert given address to coordinates, used later on for google maps
         :return: location in coordinates (ex. 49.0215125, 50.434124)
         '''
-        geolocator = Nominatim(user_agent="users")
-        location = geolocator.geocode(self.address)
+        geolocator = Nominatim(user_agent='users')
+        location = geolocator.geocode(self.get_address())
         return location
 
     def save(self, *args, **kwargs):

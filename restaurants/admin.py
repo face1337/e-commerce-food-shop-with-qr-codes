@@ -3,13 +3,13 @@ from django.utils.html import format_html
 
 from . models import Food, FoodImage, Restaurant, Category
 
-admin.site.register(Category)
 admin.site.register(FoodImage)
 
 
 class FoodAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug', 'restaurant', 'price')
     search_fields = ('name',)
+    autocomplete_fields = ('category',)
     prepopulated_fields = {"slug": ("name", )}
 
 
@@ -23,3 +23,12 @@ class RestaurantAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Restaurant, RestaurantAdmin)
+
+
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('name', 'slug')
+    search_fields = ('name',)
+    prepopulated_fields = {"slug": ("name",)}
+
+
+admin.site.register(Category, CategoryAdmin)

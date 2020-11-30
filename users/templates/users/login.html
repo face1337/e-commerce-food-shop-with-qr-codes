@@ -5,16 +5,16 @@
         <form method="POST">
             {% csrf_token %}
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Utwórz konto!</legend>
-                {{ form|crispy }}  <!-- printing a form - email, password, confirm password-->
+                <legend class="border-bottom mb-4">Zaloguj się</legend>
+                {{ form|crispy }}
             </fieldset>
             <div class="form-group">
-                <button class="btn-outline-info" type="submit">Zarejestruj się</button>
+                <button class="btn-outline-info" type="submit">Zaloguj</button>
             </div>
         </form>
         <div class="border-top pt-3">
-            <small class="text-muted">Masz już konto?
-                <a class="ml-2" href="{% url 'users-login' %}">Zaloguj się</a></small>
+            <small class="text-muted">Nie masz konta?
+                <a class="ml-2" href="{% url 'users-register' %}">Zarejestruj się</a></small>
         </div>
     </div>
 {% endblock content %}

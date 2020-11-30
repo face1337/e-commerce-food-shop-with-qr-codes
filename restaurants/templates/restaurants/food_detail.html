@@ -3,6 +3,12 @@
 
     <h1>{{ object.name }}</h1>
     <p>Cena: {{ object.price }} zł</p>
+    <strong>{{ object.category.name }}</strong>
+    <p>
+    {% for image in object.foodimage_set.all%}
+        <img src="{{ image.thumbnail.url }}" alt="FoodImage">
+    {% endfor %}
+    </p>
     <span>
         <a href="{% url 'restaurant-foods' food.restaurant.slug %}">Powrót</a>
     </span>
