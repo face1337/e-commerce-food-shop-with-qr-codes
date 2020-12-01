@@ -63,6 +63,7 @@ class AddressListView(LoginRequiredMixin, ListView):
 class AddressCreateView(LoginRequiredMixin, CreateView):
     model = Address
     template_name = 'users/address_form.html'
+
     fields = [
         "address2",
         "house_number",

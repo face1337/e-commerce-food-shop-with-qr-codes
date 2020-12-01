@@ -9,15 +9,12 @@ from restaurants.models import Food  # zaimportowanie modelu restauracji
 
 class Cart(models.Model):
 
-    class OrderStatus(models.TextChoices):
-        OPEN = 'OTWARTE', _('Otwarto nowe zamówienie')
-        PLACED = 'ZŁOŻONE', _('Zamówienie przyjęte')
-        BEING_PREPARED = 'PRZYGOTOWYWANIE', _('Zamówienie przygotowywane')
-        SENT = 'WYSŁANE', _('Zamówienie wysłane')
-        COMPLETED = 'ZREALIZOWANE', _('Zamówienie zrealizowane')
+    class CartStatus(models.TextChoices):
+        OPEN = 'NOWY', _('Nowy koszyk')
+        SUBMITTED = 'WYSŁANY', _('Wysłany')
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Użytkownik:")
-    status = models.CharField(max_length=15, choices=OrderStatus.choices, default=OrderStatus.OPEN)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Użytkownik:", blank=True, null=True)
+    status = models.CharField(max_length=15, choices=CartStatus.choices, default=CartStatus.OPEN)
     date_placed = models.DateTimeField(default=timezone.now)
 
     def is_empty(self):
@@ -26,11 +23,22 @@ class Cart(models.Model):
     def count(self):
         return sum(i.quantity for i in self.cartline_set.all())
 
+    def __str__(self):
+        return '{}'.format(self.user)
+
 
 class CartLine(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
     food = models.ForeignKey(Food, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1)])
+    quantity = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1)], verbose_name="Ilość:")
 
     def __str__(self):
-        return "Zamówienie :".format(self.food)
+        return "Zamówienie :{}".format(self.food.name)
+
+'''
+        OPEN = 'OTWARTE', _('Otwarto nowe zamówienie')
+        PLACED = 'ZŁOŻONE', _('Zamówienie przyjęte')
+        BEING_PREPARED = 'PRZYGOTOWYWANIE', _('Zamówienie przygotowywane')
+        SENT = 'WYSŁANE', _('Zamówienie wysłane')
+        COMPLETED = 'ZREALIZOWANE', _('Zamówienie zrealizowane')
+'''

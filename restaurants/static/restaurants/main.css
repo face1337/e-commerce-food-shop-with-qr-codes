@@ -2,9 +2,10 @@ body {
   background: #f3f3f3;
   color: #333333;
   margin-top: 5rem;
+  margin-bottom :5rem;
 }
 .footer {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   width: 100%;
   color:#FFFFFF;
@@ -113,7 +114,7 @@ a.article-title:hover {
 .btn-outline-info{
   background-color:#A71930;
   color:#FFFFFF;
-  border:none;
+  border: 1px solid rgba(0,0,0,.1);
   padding:2px;
 }
 

@@ -1,0 +1,22 @@
+{% extends 'restaurants/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="content-section">
+    <h2>Koszyk</h2>
+    {% if formset %}
+        <form method="POST">
+            {% csrf_token %}
+            {{ formset.management_form }}
+            {% for form in formset %}
+                <p>
+                    <b>{{ form.instance.food.name }}</b>
+                    {{ form|crispy }}
+                </p>
+            {% endfor %}
+        <button type="submit" class="btn-outline-info">Zaktualizuj</button>
+        </form>
+    {% else %}
+        <p>Twój koszyk jest pusty</p>
+    {% endif %}
+    </div>
+{% endblock content%}

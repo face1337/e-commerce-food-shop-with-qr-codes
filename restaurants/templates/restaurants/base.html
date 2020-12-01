@@ -31,16 +31,22 @@
             </div>
             <!-- Navbar Right Side -->
             <div class="navbar-nav">
-            {% if user.is_authenticated %}
-                {% if user.is_superuser %}
-                    <a class="nav-item nav-link" href="{% url 'admin:index' %}">Panel administracyjny</a>
-                {% endif %}
-              <a class="nav-item nav-link" href="{% url 'users-logout' %}">Wyloguj się</a>
-              <a class="nav-item nav-link" href="#"><img class="rounded-circle article-svg" src="#">Profil</a>
+            {% if request.cart.count > 0 %}
+                <a class="nav-item nav-link" href="{% url 'orders-cart' %}"><b>Koszyk({{ request.cart.count }})</b></a>
             {% else %}
-              <a class="nav-item nav-link" href="{% url 'users-login' %}">Logowanie</a>
-              <a class="nav-item nav-link" href="{% url 'users-register' %}">Rejestracja</a>
+                <a class="nav-item nav-link" href="{% url 'orders-cart' %}"><b>Koszyk</b></a>
             {% endif %}
+                {% if user.is_authenticated %}
+                    {% if user.is_superuser or user.is_staff %}
+                        <a class="nav-item nav-link" href="{% url 'admin:index' %}">Panel administracyjny</a>
+                    {% endif %}
+                    <a class="nav-item nav-link" href="{% url 'users-address_list' %}">Moje konto</a>
+                    <a class="nav-item nav-link" href="{% url 'users-logout' %}">Wyloguj się</a>
+                {% else %}
+                    <a class="nav-item nav-link" href="{% url 'users-login' %}">Logowanie</a>
+                    <a class="nav-item nav-link" href="{% url 'users-register' %}">Rejestracja</a>
+
+                {% endif %}
             </div>
           </div>
         </div>
