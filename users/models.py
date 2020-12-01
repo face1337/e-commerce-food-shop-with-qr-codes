@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.contrib.auth.models import (
     AbstractUser,
@@ -59,8 +60,8 @@ class User(AbstractUser):
 class Address(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Użytkownik:")
     address1 = models.CharField("Miasto:", max_length=60, default='Kraków', editable=False)  # locked for Kraków
-    address2 = models.CharField("Ulica:", max_length=60, default='ulica')
-    house_number = models.CharField("Nr bloku/domu:", max_length=60, default='0')
+    address2 = models.CharField("Ulica:", max_length=60)
+    house_number = models.CharField("Nr bloku/domu:", max_length=60)
     flat_number = models.CharField("Nr mieszkania:", max_length=60, blank=True)
     country = models.CharField(max_length=60, default="Polska", editable=False)
     qr_code = models.ImageField(upload_to='qr_codes', blank=True, max_length=3000)
@@ -70,11 +71,11 @@ class Address(models.Model):
 
     def get_address(self):
         if self.flat_number is not None:
-            return '{}, {} {}, {}/{}'.format(self.address1, self.address2, self.house_number,
-                                             self.flat_number, self.country)
+            return '{} {}/{}, {}, {}'.format(self.address2, self.house_number,
+                                             self.flat_number, self.address1,self.country)
         else:
-            return '{}, {} {}, {}'.format(self.address1, self.address2, self.house_number, self.flat_number,
-                                             self.country)
+            return '{} {}, {}, {}'.format(self.address2, self.house_number,
+                                          self.address1, self.country)
 
     def get_coordinates(self):
         '''
@@ -85,19 +86,21 @@ class Address(models.Model):
         location = geolocator.geocode(self.get_address())
         return location
 
+    def clean(self):
+        coordinates = self.get_coordinates()
+        if coordinates is None:
+            raise ValidationError("Podaj właściwy adres")
+
     def save(self, *args, **kwargs):
-        if self.get_coordinates() is not None:
-            latitude = self.get_coordinates().latitude
-            longitude = self.get_coordinates().longitude
-            qr_code_img = qrcode.make('https://www.google.pl/maps/place/{},{}'.format(latitude, longitude))
-            img = Image.new('RGB', (qr_code_img.pixel_size, qr_code_img.pixel_size), color='white')
-            img.paste(qr_code_img)
-            fname = f'qr-{self.user}.png'
-            buffer = BytesIO()
-            img.save(buffer, 'PNG')
-            self.qr_code.save(fname, File(buffer), save=False)
-            img.close()
-        else:
-            return "Podaj właściwy adres"
+        latitude = self.get_coordinates().latitude
+        longitude = self.get_coordinates().longitude
+        qr_code_img = qrcode.make('https://www.google.pl/maps/place/{},{}'.format(latitude, longitude))
+        img = Image.new('RGB', (qr_code_img.pixel_size, qr_code_img.pixel_size), color='white')
+        img.paste(qr_code_img)
+        fname = f'qr-{self.user}.png'
+        buffer = BytesIO()
+        img.save(buffer, 'PNG')
+        self.qr_code.save(fname, File(buffer), save=False)
+        img.close()
 
         super().save(*args, **kwargs)

@@ -28,3 +28,10 @@ class UserCreationForm(UsrCreationForm):
             [self.cleaned_data["email"]],
             fail_silently=True,
         )
+
+
+class AddressForm(forms.ModelForm):
+    class Meta:
+        model = models.Address
+        fields = ("address2", "house_number", "flat_number")
+
