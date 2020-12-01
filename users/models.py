@@ -56,9 +56,9 @@ class User(AbstractUser):
     objects = UserManager()
 
 
-class Profile(models.Model):
-    name = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Użytkownik:")
-    address1 = models.CharField("Miasto:",max_length=60, default='Kraków', editable=False)  # locked for Kraków
+class Address(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Użytkownik:")
+    address1 = models.CharField("Miasto:", max_length=60, default='Kraków', editable=False)  # locked for Kraków
     address2 = models.CharField("Ulica:", max_length=60, default='ulica')
     house_number = models.CharField("Nr bloku/domu:", max_length=60, default='0')
     flat_number = models.CharField("Nr mieszkania:", max_length=60, blank=True)
@@ -66,10 +66,15 @@ class Profile(models.Model):
     qr_code = models.ImageField(upload_to='qr_codes', blank=True, max_length=3000)
 
     def __str__(self):
-        return 'Profil użytkownika: {}'.format(self.name)
+        return 'Profil użytkownika: {}'.format(self.user)
 
     def get_address(self):
-        return '{}, {} {}, {}'.format(self.address1, self.address2, self.house_number, self.country)
+        if self.flat_number is not None:
+            return '{}, {} {}, {}/{}'.format(self.address1, self.address2, self.house_number,
+                                             self.flat_number, self.country)
+        else:
+            return '{}, {} {}, {}'.format(self.address1, self.address2, self.house_number, self.flat_number,
+                                             self.country)
 
     def get_coordinates(self):
         '''
@@ -81,16 +86,18 @@ class Profile(models.Model):
         return location
 
     def save(self, *args, **kwargs):
-        latitude = self.get_coordinates().latitude
-        longitude = self.get_coordinates().longitude
-
-        qr_code_img = qrcode.make('https://www.google.pl/maps/place/{},{}'.format(latitude, longitude))
-        img = Image.new('RGB', (qr_code_img.pixel_size, qr_code_img.pixel_size), color='white')
-        img.paste(qr_code_img)
-        fname = f'qr-{self.name}.png'
-        buffer = BytesIO()
-        img.save(buffer, 'PNG')
-        self.qr_code.save(fname, File(buffer), save=False)
-        img.close()
+        if self.get_coordinates() is not None:
+            latitude = self.get_coordinates().latitude
+            longitude = self.get_coordinates().longitude
+            qr_code_img = qrcode.make('https://www.google.pl/maps/place/{},{}'.format(latitude, longitude))
+            img = Image.new('RGB', (qr_code_img.pixel_size, qr_code_img.pixel_size), color='white')
+            img.paste(qr_code_img)
+            fname = f'qr-{self.user}.png'
+            buffer = BytesIO()
+            img.save(buffer, 'PNG')
+            self.qr_code.save(fname, File(buffer), save=False)
+            img.close()
+        else:
+            return "Podaj właściwy adres"
 
         super().save(*args, **kwargs)

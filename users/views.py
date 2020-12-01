@@ -1,11 +1,22 @@
+from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import ListView
+from django.views.generic.edit import (
+    FormView,
+    CreateView,
+    UpdateView,
+    DeleteView,
+)
+
 from django.views.generic.edit import FormView
 from users import forms
 
-from .models import Profile, User
-
 import logging
-from django.contrib.auth import login,authenticate
+from django.contrib.auth import login, authenticate
 from django.contrib import messages
+
+from .models import Address, User
+#from django.contrib.admin.views.decorators import staff_member_required # Only staff member has access
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +31,7 @@ class RegisterView(FormView):
 
     def form_valid(self, form):
         response = super().form_valid(form)
-        form.save()
+        form.save()  # save user
         email = form.cleaned_data.get("email")
         raw_password = form.cleaned_data.get("password1")
         logger.info(
@@ -38,3 +49,50 @@ class RegisterView(FormView):
 
         return response
 
+
+class AddressListView(LoginRequiredMixin, ListView):
+    '''
+
+    '''
+    model = Address
+
+    def get_queryset(self):
+        return self.model.objects.filter(user=self.request.user)
+
+
+class AddressCreateView(LoginRequiredMixin, CreateView):
+    model = Address
+    template_name = 'users/address_form.html'
+    fields = [
+        "address2",
+        "house_number",
+        "flat_number",
+    ]
+    success_url = reverse_lazy("users-address_list")
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        obj.user = self.request.user
+        obj.save()
+        return super().form_valid(form)
+
+
+class AddressUpdateView(LoginRequiredMixin, UpdateView):
+    model = Address
+    fields = [
+        "address2",
+        "house_number",
+        "flat_number",
+    ]
+    success_url = reverse_lazy("users-address_list")
+
+    def get_queryset(self):
+        return self.model.objects.filter(user=self.request.user)
+
+
+class AddressDeleteView(LoginRequiredMixin, DeleteView):
+    model = Address
+    success_url = reverse_lazy("users-address_list")
+
+    def get_queryset(self):
+        return self.model.objects.filter(user=self.request.user)

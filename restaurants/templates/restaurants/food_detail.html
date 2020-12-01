@@ -7,11 +7,11 @@
     {% endfor %}
 
     <p>
-    {% for image in object.foodimage_set.all%}
+    {% for image in food_detail.foodimage_set.all%}
         <img src="{{ image.thumbnail.url }}" alt="FoodImage">
     {% endfor %}
     </p>
     <span>
-        <a href="{% url 'restaurant-foods' object.restaurant.slug %}">Powrót</a>
+        <a href="{% url 'restaurant-foods' food_detail.restaurant.slug %}">Powrót</a>
     </span>
 {% endblock %}

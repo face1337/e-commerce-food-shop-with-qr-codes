@@ -28,6 +28,10 @@ urlpatterns = [
     path('register/', user_views.RegisterView.as_view(), name='users-register'),
     path('login/', auth_views.LoginView.as_view(template_name='users/login.html'), name='users-login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='users/logout.html'), name='users-logout'),
+    path('address/',user_views.AddressListView.as_view(), name="users-address_list"),
+    path('address/create', user_views.AddressCreateView.as_view(), name="users-address_create"),
+    path('address/<int:pk>/update', user_views.AddressUpdateView.as_view(), name="users-address_update"),
+    path('address/<int:pk>/delete', user_views.AddressDeleteView.as_view(), name="users-address_confirm_delete"),
     path('', include('restaurants.urls')),
 ]
 

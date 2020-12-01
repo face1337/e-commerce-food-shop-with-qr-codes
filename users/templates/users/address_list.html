@@ -1,0 +1,31 @@
+{% extends "restaurants/base.html" %}
+{% block content %}
+    <h1>Twoje adresy:</h1>
+    <div class="content-section">
+        {% for address in object_list %}
+            {% if address.qr_code %}
+                <img class="qr-code-thumbnail" src="{{ address.qr_code.url }}">
+            {% endif %}
+        <div class="media-body">
+            <p class="content">
+                {{ address.address1 }}<br>
+                {{ address.address2 }}<br>
+                {% if address.flat_number %}
+                    {{ address.house_number }}/
+                    {{ address.flat_number }}<br>
+                {% else %}
+                    {{ address.house_number }}<br>
+                {% endif %}
+            </p>
+            <p>
+                <a href="{% url "users-address_update" address.id %}">Zaktualizuj adres</a><br>
+                <a href="{% url "users-address_confirm_delete" address.id %}">Usuń adres</a>
+            </p>
+        </div>
+        <hr>
+        {% endfor %}
+        <p>
+            <a href="{% url "users-address_create" %}">Dodaj kolejny adres</a>
+        </p>
+    </div>
+{% endblock content %}

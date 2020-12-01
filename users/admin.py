@@ -1,19 +1,19 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 
-from . import models
+from .models import Address, User
 
 # Register your models here.
 
 
-class ProfileAdmin(admin.ModelAdmin):
+class AddressAdmin(admin.ModelAdmin):
     readonly_fields = ('address1', 'country',)
 
 
-admin.site.register(models.Profile, ProfileAdmin)
+admin.site.register(Address, AddressAdmin)
 
 
-@admin.register(models.User)
+@admin.register(User)
 class UserAdmin(DjangoUserAdmin):
     fieldsets = (
         (None, {"fields": ("email", "password")}),

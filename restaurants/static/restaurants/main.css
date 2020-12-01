@@ -28,7 +28,7 @@ a {
 }
 
 a:hover {
-  color: #363636;
+  color: #A71930;
 }
 
 .bg-steel {
@@ -56,9 +56,9 @@ a:hover {
 }
 
 .content-section {
-  background: #ffffff;
+  background: #fafafa;
   padding: 10px 20px;
-  border: 1px solid #c4c4c4;
+  border: 1px solid rgba(0,0,0,.1);
   border-radius: 3px;
   margin-bottom: 20px;
 }
@@ -68,7 +68,7 @@ a:hover {
 }
 
 a.article-title:hover {
-  color: #573590;
+  color: #00693C;
   text-decoration: none;
 }
 
@@ -108,4 +108,23 @@ a.article-title:hover {
 
 .account-heading {
   font-size: 2.5rem;
+}
+
+.btn-outline-info{
+  background-color:#A71930;
+  color:#FFFFFF;
+  border:none;
+  padding:2px;
+}
+
+.btn-outline-info:hover{
+  background-color:#00693C;
+  cursor:pointer;
+}
+
+.qr-code-thumbnail{
+  width:150px;
+  height:150px;
+  border: 1px solid rgba(0,0,0,.1);
+  display:block;
 }
