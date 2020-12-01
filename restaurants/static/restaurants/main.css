@@ -35,11 +35,11 @@ a:hover {
   background-color: #fafafa;
 }
 
-.navbar-dark .navbar-brand {
+.navbar-light .navbar-brand {
   color: #00693C;
 }
 
-.navbar-dark .navbar-brand:hover {
+.navbar-light .navbar-brand:hover {
     color: #A71930;
 }
 
@@ -48,7 +48,7 @@ a:hover {
 }
 
 .site-header .navbar-nav .nav-link:hover {
-  color: #1e1e1e;
+  color: #A71930;
 }
 
 .site-header .navbar-nav .nav-link.active {
@@ -126,5 +126,5 @@ a.article-title:hover {
   width:150px;
   height:150px;
   border: 1px solid rgba(0,0,0,.1);
-  display:block;
+  float:right;
 }

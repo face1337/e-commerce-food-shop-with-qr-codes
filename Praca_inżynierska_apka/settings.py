@@ -140,3 +140,4 @@ MEDIA_URL = '/media/'
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 LOGIN_REDIRECT_URL = '/.'
+LOGIN_URL = '/login'
