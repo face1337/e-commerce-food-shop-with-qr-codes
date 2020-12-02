@@ -5,7 +5,7 @@ from users.models import User
 
 from django.core.validators import MinValueValidator
 from django.utils.translation import gettext_lazy as _
-from restaurants.models import Food  # zaimportowanie modelu restauracji
+from restaurants.models import Food
 
 
 class Cart(models.Model):
@@ -36,10 +36,21 @@ class CartLine(models.Model):
     def __str__(self):
         return "Zamówienie :{}".format(self.food.name)
 
-'''
-        OPEN = 'OTWARTE', _('Otwarto nowe zamówienie')
+
+class Order(models.Model):
+    class OrderStatus(models.TextChoices):
+        NEW = 'NOWE', _('Utworzono nowe zamówienie')
         PLACED = 'ZŁOŻONE', _('Zamówienie przyjęte')
         BEING_PREPARED = 'PRZYGOTOWYWANIE', _('Zamówienie przygotowywane')
         SENT = 'WYSŁANE', _('Zamówienie wysłane')
         COMPLETED = 'ZREALIZOWANE', _('Zamówienie zrealizowane')
-'''
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    status = models.CharField(
+        choices=OrderStatus.choices,
+        default=OrderStatus.NEW,
+        verbose_name="Status zamówienia",
+        max_length=15
+    )
+
+    phone_number = models.DecimalField(verbose_name="Numer telefonu", max_digits=9, decimal_places=0)

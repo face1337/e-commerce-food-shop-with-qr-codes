@@ -32,7 +32,7 @@
             <!-- Navbar Right Side -->
             <div class="navbar-nav">
             {% if request.cart.count > 0 %}
-                <a class="nav-item nav-link" href="{% url 'orders-cart' %}"><b>Koszyk({{ request.cart.count }})</b></a>
+                <a class="nav-item nav-link" style="color:#00693C" href="{% url 'orders-cart' %}"><b>Koszyk({{ request.cart.count }})</b></a>
             {% else %}
                 <a class="nav-item nav-link" href="{% url 'orders-cart' %}"><b>Koszyk</b></a>
             {% endif %}

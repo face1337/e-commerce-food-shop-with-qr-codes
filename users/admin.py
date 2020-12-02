@@ -7,7 +7,10 @@ from .models import Address, User
 
 
 class AddressAdmin(admin.ModelAdmin):
-    readonly_fields = ('address1', 'country',)
+    fields = ('user', 'image_tag', 'address2','house_number','flat_number', 'address1')
+    readonly_fields = ('address1', 'image_tag',)
+
+    list_display = ('user', 'address2', 'house_number', 'flat_number', 'address1')
 
 
 admin.site.register(Address, AddressAdmin)

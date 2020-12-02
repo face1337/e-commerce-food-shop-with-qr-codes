@@ -1,5 +1,3 @@
-from django.http import HttpResponseRedirect
-from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView
 from django.views.generic.edit import (
@@ -8,18 +6,19 @@ from django.views.generic.edit import (
     UpdateView,
     DeleteView,
 )
-
-from django.views.generic.edit import FormView
-from users import forms
-
-import logging
-from django.contrib.auth import views as auth_views
-from django.contrib.auth import login, authenticate
 from django.contrib import messages
 
+from django.contrib.auth import views as auth_views
+from django.contrib.auth import login, authenticate
+
+from django.http import HttpResponseRedirect
+from django.urls import reverse_lazy
+
+from users import forms
 from .forms import AddressForm
-from .models import Address, User
-#from django.contrib.admin.views.decorators import staff_member_required # Only staff member has access
+from .models import Address
+
+import logging
 
 logger = logging.getLogger(__name__)
 

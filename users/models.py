@@ -9,6 +9,8 @@ from django.core.files import File
 import qrcode
 from PIL import Image
 from io import BytesIO
+
+from django.utils.safestring import mark_safe
 from geopy.geocoders import Nominatim
 
 
@@ -58,6 +60,9 @@ class User(AbstractUser):
 
 
 class Address(models.Model):
+    class Meta:
+        verbose_name_plural = "Adresy użytkowników"
+
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Użytkownik:")
     address1 = models.CharField("Miasto:", max_length=60, default='Kraków', editable=False)  # locked for Kraków
     address2 = models.CharField("Ulica:", max_length=60)
@@ -67,7 +72,12 @@ class Address(models.Model):
     qr_code = models.ImageField(upload_to='qr_codes', blank=True, max_length=3000)
 
     def __str__(self):
-        return 'Profil użytkownika: {}'.format(self.user)
+        return '{}'.format(self.user)
+
+    def image_tag(self):
+        return mark_safe('<img src="/media/{}" width="150" height="150" />'.format(self.qr_code))
+
+    image_tag.short_description = 'Kod QR'
 
     def get_address(self):
         if self.flat_number is not None:
