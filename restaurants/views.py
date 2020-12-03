@@ -25,6 +25,3 @@ class FoodDetailView(DetailView):
     model = Food
     template_name = 'restaurants/food_detail.html'
     context_object_name = 'food_detail'
-
-
-

@@ -1,6 +1,6 @@
 from django.forms import inlineformset_factory
-
 from .models import Cart, CartLine
+
 
 CartLineFormSet = inlineformset_factory(
     Cart,
@@ -8,3 +8,4 @@ CartLineFormSet = inlineformset_factory(
     fields=('quantity',),
     extra=0,
 )
+

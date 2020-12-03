@@ -19,6 +19,7 @@ from django.urls import include, path
 
 from django.conf.urls.static import static
 from django.conf import settings
+from django.views.generic import TemplateView
 
 from users import views as user_views
 from orders import views as order_views
@@ -44,6 +45,10 @@ urlpatterns = [
     path('add_to_cart/', order_views.add_to_cart, name='orders-add_to_cart'),
 
     path('cart/', order_views.manage_cart, name='orders-cart'),
+
+    path('orders/address_select', user_views.AddressSelectView.as_view(), name='users-address_select'),
+
+    path('orders/checkout', TemplateView.as_view(template_name="orders/order_done.html"), name='orders-order_done'),
 
     path('', include('restaurants.urls')),
 ]

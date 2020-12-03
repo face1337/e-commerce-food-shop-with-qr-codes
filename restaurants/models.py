@@ -39,7 +39,7 @@ class Food(models.Model):
         verbose_name_plural="Posiłki"
 
     def __str__(self):  # metoda do wyświetlania obiektu w django admin, dodajemy zł do pola ceny
-        return '{} {} {} {} zł'.format(self.name, self. restaurant, self.category, self.price)
+        return '{} {}'.format(self.name, self. restaurant)
 
 '''    def get_absolute_url(self):
         return reverse('food-detail', kwargs={'slug': self.slug})'''

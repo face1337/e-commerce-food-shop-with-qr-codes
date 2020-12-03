@@ -86,7 +86,9 @@ class Address(models.Model):
         '''
         data = decode(Image.open(self.qr_code))
         return mark_safe(
-            '<a href="{}" target="_blank">Nawiguj</a>'.format(data[0].data.decode())
+            '<a href="{}" target="_blank">'
+            '   <button class="submit-row" style= "cursor:pointer" type="button"> Nawiguj </button>'
+            '</a>'.format(data[0].data.decode())
         )
 
     read_qr_code.short_description = 'Skanuj kod'

@@ -15,7 +15,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 
 from users import forms
-from .forms import AddressForm
+from .forms import AddressForm, AddressSelectionForm
 from .models import Address
 
 import logging
@@ -108,3 +108,25 @@ class AddressDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_queryset(self):
         return self.model.objects.filter(user=self.request.user)
+
+
+class AddressSelectView(LoginRequiredMixin, FormView):
+    template_name = 'users/address_select.html'
+    form_class = AddressSelectionForm
+    success_url = reverse_lazy("orders-order_done")
+
+    def get_form_kwargs(self):
+        '''
+        extract the user form
+        :return: return user in dict
+        '''
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def form_valid(self, form):
+        del self.request.session['cart_id']  # if form is valid, delete items in cart
+        cart = self.request.cart
+        cart.make_order(form.cleaned_data['shipping_address'])
+
+        return super().form_valid(form)

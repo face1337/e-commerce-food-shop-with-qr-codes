@@ -1,0 +1,18 @@
+{% extends "restaurants/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="content-section">
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Wybierz adres do dostawy</legend>
+                {{ form|crispy }}
+            </fieldset>
+            <div class="form-group">
+                <button class="btn-outline-info" type="submit">Zapisz</button>
+            </div>
+            <hr>
+            <a class="btn btn-primary" href="{% url 'users-address_create' %}">Dodaj nowy adres</a>
+        </form>
+    </div>
+{% endblock content %}
