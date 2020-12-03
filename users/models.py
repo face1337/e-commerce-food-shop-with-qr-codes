@@ -8,8 +8,10 @@ from django.core.files import File
 
 import qrcode
 from PIL import Image
+from pyzbar.pyzbar import decode
 from io import BytesIO
 
+from django.http import HttpResponse
 from django.utils.safestring import mark_safe
 from geopy.geocoders import Nominatim
 
@@ -77,6 +79,17 @@ class Address(models.Model):
     def image_tag(self):
         return mark_safe('<img src="/media/{}" width="150" height="150" />'.format(self.qr_code))
 
+    def read_qr_code(self):
+        '''
+        https://www.programcreek.com/python/example/123813/pyzbar.pyzbar.decode
+        :return:
+        '''
+        data = decode(Image.open(self.qr_code))
+        return mark_safe(
+            '<a href="{}" target="_blank">Nawiguj</a>'.format(data[0].data.decode())
+        )
+
+    read_qr_code.short_description = 'Skanuj kod'
     image_tag.short_description = 'Kod QR'
 
     def get_address(self):
