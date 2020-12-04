@@ -4,8 +4,8 @@ from django.urls import reverse
 
 class Restaurant(models.Model):
     name = models.CharField("Restauracja:",max_length=150)
-    address = models.CharField("Adres:", max_length=255, default='adres')
-    slug = models.SlugField("URL:",max_length=50, default='nowyurl')
+    address = models.CharField("Adres:", max_length=255)
+    slug = models.SlugField("URL:",max_length=50)
 
     class Meta:
         verbose_name = "Restauracja"
@@ -30,7 +30,7 @@ class Category(models.Model):
 class Food(models.Model):
     name = models.CharField("Nazwa dania:", max_length=150)
     category = models.ManyToManyField(Category)
-    slug = models.SlugField(max_length=50, default='slug')
+    slug = models.SlugField(max_length=50)
     price = models.DecimalField("Cena:", max_digits=10, decimal_places=2)  # pole dla ceny
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, verbose_name="Restauracja:")  # Klucz obcy do modelu restauracja
 
@@ -40,9 +40,6 @@ class Food(models.Model):
 
     def __str__(self):  # metoda do wyświetlania obiektu w django admin, dodajemy zł do pola ceny
         return '{} {}'.format(self.name, self. restaurant)
-
-'''    def get_absolute_url(self):
-        return reverse('food-detail', kwargs={'slug': self.slug})'''
 
 
 class FoodImage(models.Model):

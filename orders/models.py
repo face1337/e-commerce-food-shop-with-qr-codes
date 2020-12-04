@@ -17,6 +17,9 @@ logger = logging.getLogger(__name__)
 
 
 class Cart(models.Model):
+    class Meta:
+        verbose_name = "Koszyk"
+        verbose_name_plural = "Koszyki"
 
     class CartStatus(models.TextChoices):
         OPEN = 'NOWY', _('Nowy koszyk')
@@ -57,27 +60,40 @@ class Cart(models.Model):
 
         self.status = Cart.CartStatus.SUBMITTED
         self.save()
-        return order
+        return order_line
 
     def __str__(self):
-        return '{}'.format(self.user)
+        return 'Koszyk użytkownika {}'.format(self.user)
 
 
 class CartLine(models.Model):
     '''
     Cart Queue
     '''
+    class Meta:
+        verbose_name = "Produkty w koszyku"
+        verbose_name_plural = "Produkty w koszyku"
+
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
     food = models.ForeignKey(Food, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1)], verbose_name="Ilość:")
+
+    def total_price(self):
+        return self.quantity * self.food.price
+
+    total_price.short_description = 'Koszt:'
 
     def __str__(self):
         return "Zamówienie :{}".format(self.food.name)
 
 
 class Order(models.Model):
+    class Meta:
+        verbose_name = "zamówienie"
+        verbose_name_plural = "Zamówienia"
+
     class OrderStatus(models.TextChoices):
-        NEW = 'NOWE', _('Utworzono nowe zamówienie')
+        NEW = 'NOWE', _('Oczekuje na przyjęcie')
         PLACED = 'PRZYJĘTE', _('Zamówienie przyjęte.')
         COMPLETED = 'ZREALIZOWANE', _('Zamówienie zrealizowane')
 
@@ -120,15 +136,28 @@ class Order(models.Model):
     read_qr_code.short_description = 'Skanuj kod'
     image_tag.short_description = 'Kod QR'
 
+    def __str__(self):
+        return "ID zamówienia : {}".format(self.id)
+
 
 class OrderLine(models.Model):
-    class OrderLineStatus(models.TextChoices):
-        NEW = 'NOWE', _('Utworzono nowe zamówienie')
-        PLACED = 'ZŁOŻONE', _('Zamówienie przyjęte')
-        BEING_PREPARED = 'PRZYGOTOWYWANIE', _('Zamówienie przygotowywane')
-        SENT = 'WYSŁANE', _('Zamówienie wysłane')
-        CANCELLED = 'ANULOWANE', _('Zamówienie anulowane')
-
+    NEW = 'NEW'
+    ACCEPTED = 'ACCEPTED'
+    BEING_PREPARED = 'BEING PREPARED'
+    SENT = 'SENT'
+    DELIVERED = 'DELIVERED'
+    CANCELLED = 'CANCELLED'
+    STATUS = [
+        (NEW, 'Oczekujące na przyjęcie'),
+        (ACCEPTED, 'Zamówienie przyjęte'),
+        (BEING_PREPARED, 'Zamówienie przygotowywane'),
+        (SENT, 'Zamówienie wysłane'),
+        (DELIVERED, 'Zamówienie dostarczone, zrealizowne'),
+        (CANCELLED, 'Zamówienie anulowane'),
+    ]
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="kolejka")
     product = models.ForeignKey(Food, on_delete=models.PROTECT)  # if food deleted, order still in history
-    status = models.CharField(choices=OrderLineStatus.choices, default=OrderLineStatus.NEW, max_length=15)
+    status = models.CharField(choices=STATUS, default=NEW, max_length=15)
+
+    def __str__(self):
+        return "Zamówienie nr {}, {}".format(self.order_id, self.product.name)

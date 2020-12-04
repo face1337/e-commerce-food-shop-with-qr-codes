@@ -1,5 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import ListView
+from django.shortcuts import get_object_or_404
+from django.views.generic import ListView, DetailView
 from django.views.generic.edit import (
     FormView,
     CreateView,
@@ -17,6 +18,7 @@ from django.urls import reverse_lazy
 from users import forms
 from .forms import AddressForm, AddressSelectionForm
 from .models import Address
+from orders.models import OrderLine, Order
 
 import logging
 
@@ -130,3 +132,23 @@ class AddressSelectView(LoginRequiredMixin, FormView):
         cart.make_order(form.cleaned_data['shipping_address'])
 
         return super().form_valid(form)
+
+
+class OrderListView(LoginRequiredMixin, ListView):
+    model = Order
+    template_name = 'users/orders.html'
+    context_object_name = 'orders'
+
+    def get_queryset(self):
+        return self.model.objects.filter(user=self.request.user)
+
+
+class ItemsInOrderListView(LoginRequiredMixin, ListView):
+    model = OrderLine
+    template_name = 'users/order_details.html'
+    context_object_name = 'order_details'
+
+    def get_queryset(self):
+        # order = get_object_or_404(Order,)
+        # return OrderLine.objects.filter(order=order)
+        return self.model.objects.filter(order__user=self.request.user)

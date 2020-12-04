@@ -41,6 +41,7 @@
                         <a class="nav-item nav-link" href="{% url 'admin:index' %}">Panel administracyjny</a>
                     {% endif %}
                     <a class="nav-item nav-link" href="{% url 'users-address_list' %}">Moje konto</a>
+                    <a class="nav-item nav-link" href="{% url 'users-orders' user.email %}">Zamówienia</a>
                     <a class="nav-item nav-link" href="{% url 'users-logout' %}">Wyloguj się</a>
                 {% else %}
                     <a class="nav-item nav-link" href="{% url 'users-login' %}">Logowanie</a>

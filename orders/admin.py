@@ -4,7 +4,8 @@ from .models import Cart, CartLine, Order, OrderLine
 
 class CartLineInline(admin.TabularInline):
     model = CartLine
-    readonly_fields = ("food",)
+    extra = 0
+    readonly_fields = ("food", "total_price", )
 
 
 @admin.register(Cart)
@@ -15,10 +16,9 @@ class CartAdmin(admin.ModelAdmin):
     inlines = (CartLineInline,)
 
 
-class OrderLineInline(admin.TabularInline):
+class OrderLineInline(admin.StackedInline):
     model = OrderLine
-    # raw_id_fields = ("product",)
-    fields = ("quantity",)
+    extra = 0
     readonly_fields = ("product",)
 
 
@@ -44,4 +44,5 @@ class OrderAdmin(admin.ModelAdmin):
                     },
                 ),
     )
-    readonly_fields = ('image_tag', 'read_qr_code',)
+    readonly_fields = ('user', 'shipping_address1', 'shipping_address2', 'house_number',
+                       'flat_number','image_tag', 'read_qr_code',)

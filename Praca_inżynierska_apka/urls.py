@@ -50,6 +50,10 @@ urlpatterns = [
 
     path('orders/checkout', TemplateView.as_view(template_name="orders/order_done.html"), name='orders-order_done'),
 
+    path('users/orders/<str:email>', user_views.OrderListView.as_view(), name='users-orders'),
+
+    path('users/orders/order_details/<int:pk>', user_views.ItemsInOrderListView.as_view(), name='users-order_details'),
+
     path('', include('restaurants.urls')),
 ]
 

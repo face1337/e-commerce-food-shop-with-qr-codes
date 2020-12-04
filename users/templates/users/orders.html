@@ -1,0 +1,22 @@
+{% extends "restaurants/base.html" %}
+{% block content %}
+    <h1>Twoje zamówienia:</h1>
+    <div class="content-section">
+        {% if orders %}
+            <table class="table">
+              <tr>
+                <th scope="col">Produkt</th>
+                <th scope="col">Status</th>
+              </tr>
+            {% for order in orders %}
+              <tr>
+                  <td><a href="{% url 'users-order_details' order.id %}">{{ order }}</a></td>
+                    <td>{{ order.get_status_display }}</td>
+              </tr>
+            {% endfor %}
+            </table>
+        {% else%}
+            <p>Historia twoich zamówień jest pusta</p>
+        {% endif %}
+    </div>
+{% endblock content %}

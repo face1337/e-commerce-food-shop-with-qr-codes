@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.shortcuts import render, get_object_or_404
 from django.contrib import messages
 
-from .models import Cart, CartLine
+from .models import Cart, CartLine, Order
 from restaurants.models import Food
 from .forms import CartLineFormSet
 

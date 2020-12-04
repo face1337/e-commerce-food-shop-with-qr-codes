@@ -1,0 +1,22 @@
+{% extends "restaurants/base.html" %}
+{% block content %}
+    <h1>Szczegóły zamówienia :</h1>
+    <div class="content-section">
+        {% if order_details %}
+            <table class="table">
+              <tr>
+                <th scope="col">Produkt</th>
+                <th scope="col">Status</th>
+              </tr>
+            {% for order in order_details %}
+              <tr>
+                    <td>{{ order.product }}</td>
+                    <td>{{ order.get_status_display }}</td>
+              </tr>
+            {% endfor %}
+            </table>
+        {% else%}
+            <p>Oops... Pusto</p>
+        {% endif %}
+    </div>
+{% endblock content %}
