@@ -18,6 +18,7 @@
                     {% endfor %}
                 <br>
                     Cena:<i> {{ food.price }}</i>
+                    <a href="{% url 'orders-add_to_cart' %}?food_id={{ food.id }}">Dodaj do koszyka</a>
                 </p>
             <hr>
         {% endfor %}

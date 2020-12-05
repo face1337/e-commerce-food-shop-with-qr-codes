@@ -1,3 +1,4 @@
+from django.core import exceptions
 from django.db import models
 from django.utils import timezone
 from django.utils.safestring import mark_safe
@@ -35,10 +36,9 @@ class Cart(models.Model):
     def count(self):
         return sum(i.quantity for i in self.cartline_set.all())
 
-    def make_order(self, shipping_address):
-        if not self.user:
-            raise PermissionError("Zaloguj się.")
+    count.short_description = "Ilość: "
 
+    def make_order(self, shipping_address):
         order_data = {
             "user": self.user,
             "shipping_address1": shipping_address.address1,
@@ -91,6 +91,7 @@ class Order(models.Model):
     class Meta:
         verbose_name = "zamówienie"
         verbose_name_plural = "Zamówienia"
+        ordering = ['-date_placed']
 
     class OrderStatus(models.TextChoices):
         NEW = 'NOWE', _('Oczekuje na przyjęcie')

@@ -129,6 +129,7 @@ class AddressSelectView(LoginRequiredMixin, FormView):
     def form_valid(self, form):
         del self.request.session['cart_id']  # if form is valid, delete items in cart
         cart = self.request.cart
+        cart.user = self.request.user
         cart.make_order(form.cleaned_data['shipping_address'])
 
         return super().form_valid(form)
@@ -149,6 +150,4 @@ class ItemsInOrderListView(LoginRequiredMixin, ListView):
     context_object_name = 'order_details'
 
     def get_queryset(self):
-        # order = get_object_or_404(Order,)
-        # return OrderLine.objects.filter(order=order)
         return self.model.objects.filter(order__user=self.request.user)

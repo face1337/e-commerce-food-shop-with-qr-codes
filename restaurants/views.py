@@ -16,10 +16,6 @@ class FoodRestaurantListView(ListView):
     template_name = 'restaurants/restaurant_foods.html'
     context_object_name = 'foods'
 
-    def get_queryset(self):
-        restaurant = get_object_or_404(Restaurant, slug=self.kwargs.get('slug'))
-        return Food.objects.filter(restaurant=restaurant)
-
 
 class FoodDetailView(DetailView):
     model = Food

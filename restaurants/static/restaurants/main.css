@@ -120,12 +120,12 @@ a.article-title:hover {
 }
 
 .btn-primary{
-  background-color:#A71930;
+  background-color:#00693C;
   border-color: rgba(0,0,0,.1);
   color:#FFFFFF;
 }
 .btn-primary:hover{
-  background-color:#00693C;
+  background-color:#A71930;
   border-color: rgba(0,0,0,.1);
   color:#FFFFFF;
 }

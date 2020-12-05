@@ -39,7 +39,7 @@ class AddressForm(forms.ModelForm):
 
 
 class AddressSelectionForm(forms.Form):
-    shipping_address = forms.ModelChoiceField(queryset=None)
+    shipping_address = forms.ModelChoiceField(queryset=None, label="Adres dostawy")
 
     def __init__(self, user, *args, **kwargs):
         super().__init__(*args, **kwargs)

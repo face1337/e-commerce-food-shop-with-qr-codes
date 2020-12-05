@@ -13,7 +13,7 @@
                     {{ form|crispy }}
                 </p>
             {% endfor %}
-        <button type="submit" class="btn-outline-info">Zaktualizuj</button>
+        <button type="submit" class="btn btn-primary">Zaktualizuj</button>
         {% if user.is_authenticated %}
             <a href="{% url 'users-address_select' %}" class="btn btn-primary">Złóż zamówienie</a>
         {% else %}

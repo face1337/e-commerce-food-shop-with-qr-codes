@@ -71,10 +71,14 @@ class Address(models.Model):
     house_number = models.CharField("Nr bloku/domu:", max_length=60)
     flat_number = models.CharField("Nr mieszkania:", max_length=60, blank=True)
     country = models.CharField(max_length=60, default="Polska", editable=False)
-    qr_code = models.ImageField(upload_to='qr_codes', blank=True, max_length=3000)
+    qr_code = models.ImageField(upload_to='qr_codes', blank=True)
 
     def __str__(self):
-        return '{}'.format(self.user)
+        if self.flat_number is not None:
+            return '{} {}/{}, {}, {} | {}'.format(self.address2, self.house_number, self.flat_number,
+                                                  self.address1, self.country, self.user)
+        else:
+            return '{} {}, {}, {} | {}'.format(self.address2, self.house_number, self.address1, self.country, self.user)
 
     def image_tag(self):
         return mark_safe('<img src="/media/{}" width="150" height="150" />'.format(self.qr_code))
@@ -97,7 +101,7 @@ class Address(models.Model):
     def get_address(self):
         if self.flat_number is not None:
             return '{} {}/{}, {}, {}'.format(self.address2, self.house_number,
-                                             self.flat_number, self.address1,self.country)
+                                             self.flat_number, self.address1, self.country)
         else:
             return '{} {}, {}, {}'.format(self.address2, self.house_number,
                                           self.address1, self.country)

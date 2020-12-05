@@ -20,6 +20,7 @@ def merge_carts_if_found(sender, user, request, **kwargs):
             anonymous_cart.delete()
             request.cart = logged_in_cart
             logger.info("Dodano do koszyka dla {}".format(user),)
+            logged_in_cart.save()
         except Cart.DoesNotExist:
             anonymous_cart.user = user
             anonymous_cart.save()
