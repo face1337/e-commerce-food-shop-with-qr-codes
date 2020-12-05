@@ -27,7 +27,7 @@ def add_to_cart(request):
     messages.info(
         request, "{} dodano do koszyka".format(food.name)
     )
-    return HttpResponseRedirect(reverse("food-detail", args=(food.slug,)))
+    return HttpResponseRedirect(reverse('orders-cart'))
 
 
 def manage_cart(request):

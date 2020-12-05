@@ -60,8 +60,8 @@ a:hover {
 .content-section {
   background: #fafafa;
   padding: 10px 20px;
-  border: 1px solid rgba(0,0,0,.1);
-  border-radius: 3px;
+  /*border: 1px solid rgba(0,0,0,.1);
+  border-radius: 3px;*/
   margin-bottom: 20px;
 }
 
