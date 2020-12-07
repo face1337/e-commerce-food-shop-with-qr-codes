@@ -160,3 +160,7 @@ a.article-title:hover {
 th,td {
     word-wrap:break-spaces;
 }
+
+.items{
+  margin:auto;
+}

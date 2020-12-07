@@ -6,7 +6,7 @@ from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from .models import FoodImage
 
-THUMBNAIL_SIZE = (300, 300)
+THUMBNAIL_SIZE = (200, 200)
 
 logger = logging.getLogger(__name__)
 

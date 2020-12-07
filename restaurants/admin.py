@@ -3,7 +3,13 @@ from django.utils.html import format_html
 
 from . models import Food, FoodImage, Restaurant, Category
 
-admin.site.register(FoodImage)
+
+class FoodImageAdmin(admin.ModelAdmin):
+    fields = ('food', 'image', 'thumbnail', 'image_tag')
+    readonly_fields = ('thumbnail', 'image_tag')
+
+
+admin.site.register(FoodImage, FoodImageAdmin)
 
 
 class FoodAdmin(admin.ModelAdmin):

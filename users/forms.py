@@ -48,8 +48,4 @@ class AddressSelectionForm(forms.Form):
         self.fields['shipping_address'].queryset = queryset
 
 
-class CreateAddressForUnregisteredUser(forms.Form):
-    class Meta:
-        model = Order
-        fields = ['shipping_address1']
 

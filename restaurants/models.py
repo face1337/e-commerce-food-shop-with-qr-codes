@@ -1,5 +1,5 @@
 from django.db import models
-from django.urls import reverse
+from django.utils.safestring import mark_safe
 
 
 class Restaurant(models.Model):
@@ -43,8 +43,18 @@ class Food(models.Model):
 
 
 class FoodImage(models.Model):
-    food = models.ForeignKey(Food, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to="food_images", blank=True)
-    thumbnail = models.ImageField(upload_to="food-thumbnails", null=True)
+    food = models.ForeignKey(Food, on_delete=models.CASCADE, verbose_name="Posiłek")
+    image = models.ImageField(upload_to="food_images", blank=True, verbose_name="Obraz")
+    thumbnail = models.ImageField(upload_to="food-thumbnails", blank=True, null=True, verbose_name="Miniatura")
 
+    class Meta:
+        verbose_name ="Obraz produktu"
+        verbose_name_plural = "Obrazy produktu"
 
+    def image_tag(self):
+        return mark_safe('<img src="/media/{}"/>'.format(self.image))
+
+    image_tag.short_description = 'Obraz'
+
+    def __str__(self):
+        return self.food.name
