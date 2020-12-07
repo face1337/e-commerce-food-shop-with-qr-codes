@@ -5,14 +5,14 @@
         {% if orders %}
             <table class="table">
               <tr>
-                <th scope="col">Produkt</th>
+                <th scope="col">Zamówienie</th>
                 <th scope="col">Status</th>
                 <th scope="col">Data aktualizacji statusu zamówienia</th>
                 <th scope="col">Data złożenia zamówienia</th>
               </tr>
             {% for order in orders %}
               <tr>
-                <td><a href="{% url 'users-order_details' order.id %}">{{ order }}</a></td>
+                <td><a class="order-detail" href="{% url 'users-order_details' order.id %}"><b>{{ order }}</b></a></td>
                 <td>{{ order.get_status_display }}</td>
                 <td> {{ order.date_updated }}</td>
                 <td> {{ order.date_placed }}</td>

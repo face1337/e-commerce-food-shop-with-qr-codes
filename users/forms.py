@@ -6,6 +6,7 @@ from django.contrib.auth.forms import UsernameField
 import logging
 
 from .models import Address
+from orders.models import Order
 
 logger = logging.getLogger(__name__)
 
@@ -45,4 +46,10 @@ class AddressSelectionForm(forms.Form):
         super().__init__(*args, **kwargs)
         queryset = Address.objects.filter(user=user)
         self.fields['shipping_address'].queryset = queryset
+
+
+class CreateAddressForUnregisteredUser(forms.Form):
+    class Meta:
+        model = Order
+        fields = ['shipping_address1']
 

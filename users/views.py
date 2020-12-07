@@ -1,5 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import (
     FormView,
@@ -13,7 +13,7 @@ from django.contrib.auth import views as auth_views
 from django.contrib.auth import login, authenticate
 
 from django.http import HttpResponseRedirect
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 
 from users import forms
 from .forms import AddressForm, AddressSelectionForm
@@ -133,6 +133,11 @@ class AddressSelectView(LoginRequiredMixin, FormView):
         cart.make_order(form.cleaned_data['shipping_address'])
 
         return super().form_valid(form)
+
+    def get(self, request, *args, **kwargs):
+        if self.request.cart is None or self.request.cart.count() == 0:
+            return HttpResponseRedirect(reverse('restaurants-index'))
+        return super().get(request, *args, **kwargs)
 
 
 class OrderListView(LoginRequiredMixin, ListView):

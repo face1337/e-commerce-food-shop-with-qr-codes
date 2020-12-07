@@ -26,11 +26,12 @@ ul {
 }
 
 a {
-  color: #1e1e1e;
+  color: #00693C;
 }
 
 a:hover {
   color: #A71930;
+  text-decoration: none;
 }
 
 .bg-steel {
@@ -140,4 +141,22 @@ a.article-title:hover {
   height:150px;
   border: 1px solid rgba(0,0,0,.1);
   float:right;
+}
+
+.order-detail{
+  color: #003366;
+}
+
+.order-detail:hover{
+  color: #00693C;
+  text-decoration: none;
+}
+
+.table{
+  table-layout: fixed;
+  width: 100%;
+}
+
+th,td {
+    word-wrap:break-spaces;
 }
