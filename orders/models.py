@@ -78,9 +78,11 @@ class CartLine(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
     food = models.ForeignKey(Food, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1)], verbose_name="Ilość:")
+    total_price = models.PositiveIntegerField(default=0, validators=[MinValueValidator(0)],
+                                              verbose_name="Całkowita kwota zamówienia")
 
-    def total_price(self):
-        return self.quantity * self.food.price
+    '''def total_price(self):
+        return self.quantity * self.food.price'''
 
     total_price.short_description = 'Koszt:'
 

@@ -16,18 +16,18 @@
                     Cena: {{ form.instance.food.price }}
                 </p>
                 {{ form|crispy }}
+                Całkowita wartość zamówienia: {{ form.instance.total_price }} <br>
             {% endfor %}
-            {{ form.instance.count }}
-        <button type="submit" class="btn btn-primary">Zapisz zmiany</button>
-        <hr>
-        {% if user.is_authenticated %}
-            <a href="{% url 'users-address_select' %}" class="btn btn-primary">Złóż zamówienie</a>
-        {% else %}
-            <p>Aby dokończyć składanie zamówienia musisz się zalogować</p>
-            <a href="{% url "users-register" %}?next={% url 'users-address_select' %}" class="btn btn-primary">Zarejestruj się</a>
-            <a href="{% url "users-login" %}?next={% url 'users-address_select' %}" class="btn btn-primary">Zaloguj się</a>
-        {% endif %}
+            <button type="submit" class="btn btn-primary">Zapisz zmiany</button>
         </form>
+        <hr>
+            {% if user.is_authenticated %}
+                <a href="{% url 'users-address_select' %}" class="btn btn-primary">Złóż zamówienie</a>
+            {% else %}
+                <p>Aby dokończyć składanie zamówienia musisz się zalogować</p>
+                <a href="{% url "users-register" %}?next={% url 'users-address_select' %}" class="btn btn-primary">Zarejestruj się</a>
+                <a href="{% url "users-login" %}?next={% url 'users-address_select' %}" class="btn btn-primary">Zaloguj się</a>
+            {% endif %}
     {% else %}
         <p>Twój koszyk jest pusty</p>
     {% endif %}
