@@ -10,7 +10,7 @@
               </tr>
             {% for order in order_details %}
               <tr>
-                    <td>{{ order.product }}</td>
+                    <td>{{ order.product.name }}</td>
                     <td>{{ order.get_status_display }}</td>
               </tr>
             {% endfor %}

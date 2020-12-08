@@ -1,5 +1,6 @@
 from django.core import exceptions
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.safestring import mark_safe
 from PIL import Image
@@ -156,7 +157,7 @@ class OrderLine(models.Model):
         (DELIVERED, 'Zamówienie dostarczone, zrealizowne'),
         (CANCELLED, 'Zamówienie anulowane'),
     ]
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="kolejka")
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
     product = models.ForeignKey(Food, on_delete=models.PROTECT)  # if food deleted, order still in history
     status = models.CharField(choices=STATUS, default=NEW, max_length=15)
 
