@@ -149,10 +149,10 @@ class OrderListView(LoginRequiredMixin, ListView):
         return self.model.objects.filter(user=self.request.user)
 
 
-class ItemsInOrderListView(LoginRequiredMixin, ListView):
+class ItemsInOrderListView(LoginRequiredMixin, DetailView):
     model = OrderLine
     template_name = 'users/order_details.html'
     context_object_name = 'order_details'
 
-    def get_queryset(self):
-        return self.model.objects.filter(order__user=self.request.user)
+    '''def get_queryset(self):
+        return self.model.objects.filter(id=self.request.user._order)'''

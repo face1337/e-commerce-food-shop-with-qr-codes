@@ -34,6 +34,7 @@ class Food(models.Model):
     slug = models.SlugField(max_length=50)
     price = models.DecimalField("Cena:", max_digits=10, decimal_places=2)  # pole dla ceny
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, verbose_name="Restauracja:")  # Klucz obcy do modelu restauracja
+    description = models.TextField(blank=True, max_length=500)
 
     class Meta:
         verbose_name = "Posiłek"

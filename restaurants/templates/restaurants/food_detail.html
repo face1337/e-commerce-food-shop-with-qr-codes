@@ -1,21 +1,19 @@
 {% extends 'restaurants/base.html' %}
 {% block content %}
-    <h1>{{ food_detail.name }}</h1>
-    <div class="content-section">
-        <p>Cena: {{ food_detail.price }} zł <br>
-            <a href="{% url 'orders-add_to_cart' %}?food_id={{ food_detail.id }}">Dodaj do koszyka</a>
-            <br>
+    <h3 class="text-center">{{ food_detail.name }}</h3>
+    <article class="media content-section">
+        <div class="media-body items">
+            <div>
+                Cena: {{ food_detail.price }} zł <br>
+                {{ food_detail.description }} <br>
+                <a href="{% url 'orders-add_to_cart' %}?food_id={{ food_detail.id }}">Dodaj do koszyka</a>
+            </div>
+        </div>
         {% for image in food_detail.foodimage_set.all%}
-            <img class="rounded"  src="{{ image.thumbnail.url }}" alt="FoodImage">
+            <img class="img-fluid img-thumbnail"  src="{{ image.thumbnail.url }}" alt="FoodImage">
         {% endfor %}
-        </p>
-        <br>
 
 
-    <hr>
-        <span>
-            <a href="{% url 'restaurant-foods' food_detail.restaurant.slug %}">Powrót</a>
-        </span>
-    </div>
+    </article>
 
 {% endblock %}

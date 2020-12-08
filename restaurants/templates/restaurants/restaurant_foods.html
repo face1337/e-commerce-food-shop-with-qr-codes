@@ -25,7 +25,7 @@
             </div>
             {% for img in food.foodimage_set.all %}
                 <a href="{% url 'food-detail' food.slug %}">
-                    <img class="img-thumbnail" src="{{ img.thumbnail.url }}" alt="product thumbnail"><br>
+                    <img class="img-thumbnail img-fluid" src="{{ img.thumbnail.url }}" alt="product thumbnail"><br>
                 </a>
             {% endfor %}
             <hr>
