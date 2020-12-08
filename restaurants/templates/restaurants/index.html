@@ -1,16 +1,14 @@
 {% extends 'restaurants/base.html' %}
 {% block content %}
-    {% for restaurant in restaurants %}
-        <article class="media content-section">
-        <div class="media-body">
-            <h2>
-                <a class="article-title" href="{% url 'restaurant-foods' restaurant.slug %}">{{ restaurant.name }}</a>
-            </h2>
-                <div class="article-content">
-                    {{ restaurant.address }}
-                </div>
-        </div>
-
-        </article>
-    {% endfor %}
+        <h1 class="display-1 text-center">Witaj na Student zamawia!</h1>
+        <h1 class="text-center">
+            Nasz serwis oferuje wiele potraw oraz dostarcza je na terenie całego Krakowa.
+        </h1>
+        <h3 class="text-center">Napewno znajdziesz coś dla siebie.</h3>
+        <h5 class="text-center">
+            <small class="text-muted">Kliknij link poniżej aby skorzystać z naszej oferty</small>
+        </h5>
+        <h1 class="display-4 text-center">
+           <a href="{% url 'restaurant-foods' restaurant.slug %}">Lista posiłków</a>
+        </h1>
 {% endblock %}

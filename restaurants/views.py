@@ -1,14 +1,15 @@
-from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse
-from django.views.generic import DetailView, ListView
-from .models import Restaurant, Food, Category
+from django.shortcuts import render
+from django.views.generic import DetailView, ListView, TemplateView
+from .models import Restaurant, Food
 
 
-def index(request):
-    context = {
-        'restaurants': Restaurant.objects.all(),
-    }
-    return render(request, 'restaurants/index.html', context)
+class IndexView(TemplateView):
+    template_name = 'restaurants/index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(IndexView, self).get_context_data(**kwargs)
+        context['restaurant'] = Restaurant.objects.first()
+        return context
 
 
 class FoodRestaurantListView(ListView):

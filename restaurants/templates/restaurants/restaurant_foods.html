@@ -3,6 +3,10 @@
     {% for food in foods %}
         {% if forloop.first %} <!-- display restaurant name only once -->
             <h1>{{ food.restaurant.name }}</h1>
+            <span>
+                <h3>Pyszne potrawy dla studentów i nie tylko!</h3>
+                <h4>{{ food.restaurant.city }}, {{ food.restaurant.address }}</h4>
+            </span>
         {% endif %}
         <article class="media content-section">
             <div class="media-body items">

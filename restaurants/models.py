@@ -5,6 +5,7 @@ from django.utils.safestring import mark_safe
 class Restaurant(models.Model):
     name = models.CharField("Restauracja:",max_length=150)
     address = models.CharField("Adres:", max_length=255)
+    city = models.CharField("Miasto:", max_length=150, default="Kraków")
     slug = models.SlugField("URL:",max_length=50)
 
     class Meta:

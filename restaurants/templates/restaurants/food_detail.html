@@ -3,7 +3,8 @@
     <h1>{{ food_detail.name }}</h1>
     <div class="content-section">
         <p>Cena: {{ food_detail.price }} zł <br>
-            <a href="{% url 'orders-add_to_cart' %}?food_id={{ food_detail.id }}">Dodaj do koszyka</a><br>
+            <a href="{% url 'orders-add_to_cart' %}?food_id={{ food_detail.id }}">Dodaj do koszyka</a>
+            <br>
         {% for image in food_detail.foodimage_set.all%}
             <img class="rounded"  src="{{ image.thumbnail.url }}" alt="FoodImage">
         {% endfor %}
