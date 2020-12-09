@@ -16,10 +16,10 @@ class CartAdmin(admin.ModelAdmin):
     inlines = (CartLineInline,)
 
 
-class OrderLineInline(admin.StackedInline):
+class OrderLineInline(admin.TabularInline):
     model = OrderLine
     extra = 0
-    readonly_fields = ("product",)
+    readonly_fields = ("product", "price")
 
 
 @admin.register(Order)
@@ -41,8 +41,9 @@ class OrderAdmin(admin.ModelAdmin):
                             "image_tag",
                             "read_qr_code",
                             )
-                    },
-                ),
+            },
+        ),
+        ("Całkowita wartośc zamówienia", {"fields": ("total_price",)}),
     )
     readonly_fields = ('user', 'shipping_address1', 'shipping_address2', 'house_number',
-                       'flat_number','image_tag', 'read_qr_code',)
+                       'flat_number', 'image_tag', 'read_qr_code', 'total_price')

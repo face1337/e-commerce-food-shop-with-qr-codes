@@ -1,16 +1,13 @@
-from django.core import exceptions
 from django.db import models
-from django.urls import reverse
 from django.utils import timezone
+from django.core.validators import MinValueValidator
+from django.utils.translation import gettext_lazy as _
 from django.utils.safestring import mark_safe
+
 from PIL import Image
 from pyzbar.pyzbar import decode
 
 from users.models import User, Address
-
-
-from django.core.validators import MinValueValidator
-from django.utils.translation import gettext_lazy as _
 from restaurants.models import Food
 
 import logging
@@ -37,6 +34,9 @@ class Cart(models.Model):
     def count(self):
         return sum(i.quantity for i in self.cartline_set.all())
 
+    def get_total_price(self):
+        return sum(i.food.price for i in self.cartline_set.all())
+
     count.short_description = "Ilość: "
 
     def make_order(self, shipping_address):
@@ -47,6 +47,7 @@ class Cart(models.Model):
             "house_number": shipping_address.house_number,
             "flat_number": shipping_address.flat_number,
             "qr_code": shipping_address.qr_code,
+            "total_price": self.get_total_price(),
         }
         order = Order.objects.create(**order_data)
         count = 0
@@ -55,10 +56,10 @@ class Cart(models.Model):
                 order_line_data = {
                     "order": order,
                     "product": line.food,
+                    "price": line.food.price,
                 }
                 order_line = OrderLine.objects.create(**order_line_data)
                 count += 1
-
         self.status = Cart.CartStatus.SUBMITTED
         self.save()
         return order_line
@@ -68,9 +69,6 @@ class Cart(models.Model):
 
 
 class CartLine(models.Model):
-    '''
-    Cart Queue
-    '''
     class Meta:
         verbose_name = "Produkty w koszyku"
         verbose_name_plural = "Produkty w koszyku"
@@ -78,11 +76,7 @@ class CartLine(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
     food = models.ForeignKey(Food, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1)], verbose_name="Ilość:")
-    total_price = models.PositiveIntegerField(default=0, validators=[MinValueValidator(0)],
-                                              verbose_name="Całkowita kwota zamówienia")
-
-    '''def total_price(self):
-        return self.quantity * self.food.price'''
+    total_price = models.DecimalField(default=0, max_digits=10, decimal_places=2, verbose_name=None)
 
     total_price.short_description = 'Koszt:'
 
@@ -91,6 +85,11 @@ class CartLine(models.Model):
 
 
 class Order(models.Model):
+    '''
+    Addresses are charfields, not foreign keys.
+    Inside class Cart there's a defined method (make_order) which copies contents of address model
+    That way if user deletes his addres, in order history there's still order to given address.
+    '''
     class Meta:
         verbose_name = "zamówienie"
         verbose_name_plural = "Zamówienia"
@@ -108,11 +107,7 @@ class Order(models.Model):
         verbose_name="Status zamówienia",
         max_length=15
     )
-    '''
-    Addresses are charfields, not foreign keys.
-    Inside class Cart there's a defined method (make_order) which copies contents of address model
-    That way if user deletes his addres, in order history there's still order to given address.
-    '''
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name="Suma")
     shipping_address1 = models.CharField(max_length=60)
     shipping_address2 = models.CharField(max_length=60)
     house_number = models.CharField(max_length=60)
@@ -145,23 +140,13 @@ class Order(models.Model):
 
 
 class OrderLine(models.Model):
-    NEW = 'NEW'
-    ACCEPTED = 'ACCEPTED'
-    BEING_PREPARED = 'BEING PREPARED'
-    SENT = 'SENT'
-    DELIVERED = 'DELIVERED'
-    CANCELLED = 'CANCELLED'
-    STATUS = [
-        (NEW, 'Oczekujące na przyjęcie'),
-        (ACCEPTED, 'Zamówienie przyjęte'),
-        (BEING_PREPARED, 'Zamówienie przygotowywane'),
-        (SENT, 'Zamówienie wysłane'),
-        (DELIVERED, 'Zamówienie dostarczone, zrealizowne'),
-        (CANCELLED, 'Zamówienie anulowane'),
-    ]
+    class Meta:
+        verbose_name = "Produkt"
+        verbose_name_plural = "Produkty"
+
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    product = models.ForeignKey(Food, on_delete=models.PROTECT)  # if food deleted, order still in history
-    status = models.CharField(choices=STATUS, default=NEW, max_length=15)
+    product = models.ForeignKey(Food, on_delete=models.PROTECT, default=1, verbose_name="Produkt")  # if food deleted, order still in history
+    price = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name="Koszt")
 
     def __str__(self):
         return "Zamówienie nr {}, {}".format(self.order_id, self.product.name)

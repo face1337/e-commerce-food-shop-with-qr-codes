@@ -99,12 +99,7 @@ class Address(models.Model):
     image_tag.short_description = 'Kod QR'
 
     def get_address(self):
-        if self.flat_number is not None:
-            return '{} {}/{}, {}, {}'.format(self.address2, self.house_number,
-                                             self.flat_number, self.address1, self.country)
-        else:
-            return '{} {}, {}, {}'.format(self.address2, self.house_number,
-                                          self.address1, self.country)
+        return '{} {}, {}, {}'.format(self.address2, self.house_number, self.address1, self.country)
 
     def get_coordinates(self):
         '''

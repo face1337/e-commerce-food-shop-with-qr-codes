@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.shortcuts import render, get_object_or_404
 from django.contrib import messages
@@ -23,13 +23,12 @@ def add_to_cart(request):
     cartline, created = CartLine.objects.get_or_create(cart=cart, food=food)
     if not created:
         cartline.quantity += 1
-        cartline.total_price += food.price #  do poprawy, nie tutaj
-        cartline.cart.count
+        cartline.total_price += food.price
         cartline.save()
     messages.info(
         request, "{} dodano do koszyka".format(food.name)
     )
-    return HttpResponseRedirect(reverse('food-detail', args=(food.slug,)))
+    return HttpResponseRedirect(reverse('restaurant-foods', args=(food.restaurant.slug,)))
 
 
 def manage_cart(request):

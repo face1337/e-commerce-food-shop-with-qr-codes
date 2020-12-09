@@ -6,17 +6,17 @@
             <table class="table">
               <tr>
                 <th scope="col">Produkt</th>
-                <th scope="col">Status</th>
+                <th scope="col">Cena</th>
               </tr>
             {% for order in order_details %}
               <tr>
                     <td>{{ order.product.name }}</td>
-                    <td>{{ order.get_status_display }}</td>
+                    <td>{{ order.product.price }}</td>
               </tr>
             {% endfor %}
             </table>
         {% else%}
-            <p>Oops... Pusto</p>
+            <p>Ups... Pusto</p>
         {% endif %}
     </div>
 {% endblock content %}

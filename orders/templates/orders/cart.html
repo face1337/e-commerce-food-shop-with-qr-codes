@@ -16,10 +16,10 @@
                     Cena: {{ form.instance.food.price }}
                 </p>
                 {{ form|crispy }}
-                Całkowita wartość zamówienia: {{ form.instance.total_price }} <br>
             {% endfor %}
             <button type="submit" class="btn btn-primary">Zapisz zmiany</button>
         </form>
+        Całkowita wartość zamówienia: {{ request.cart.total_price_food }} <br>
         <hr>
             {% if user.is_authenticated %}
                 <a href="{% url 'users-address_select' %}" class="btn btn-primary">Złóż zamówienie</a>

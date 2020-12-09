@@ -9,6 +9,7 @@
                 <th scope="col">Status</th>
                 <th scope="col">Data aktualizacji statusu zamówienia</th>
                 <th scope="col">Data złożenia zamówienia</th>
+                <th scope="col">Całkowita wartość zamówienia</th>
               </tr>
             {% for order in orders %}
               <tr>
@@ -16,6 +17,7 @@
                 <td>{{ order.get_status_display }}</td>
                 <td> {{ order.date_updated }}</td>
                 <td> {{ order.date_placed }}</td>
+                <td> {{ order.total_price }}</td>
               </tr>
             {% endfor %}
             </table>
