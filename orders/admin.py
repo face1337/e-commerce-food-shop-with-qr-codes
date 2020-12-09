@@ -34,6 +34,7 @@ class OrderAdmin(admin.ModelAdmin):
             "Informacje do wysyłki",
             {
                 "fields": (
+                            "city_district",
                             "shipping_address1",
                             "shipping_address2",
                             "house_number",
@@ -45,5 +46,5 @@ class OrderAdmin(admin.ModelAdmin):
         ),
         ("Całkowita wartośc zamówienia", {"fields": ("total_price",)}),
     )
-    readonly_fields = ('user', 'shipping_address1', 'shipping_address2', 'house_number',
+    readonly_fields = ('user', 'city_district', 'shipping_address1', 'shipping_address2', 'house_number',
                        'flat_number', 'image_tag', 'read_qr_code', 'total_price')

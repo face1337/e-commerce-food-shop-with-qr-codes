@@ -13,11 +13,11 @@
               </tr>
             {% for order in orders %}
               <tr>
-                <td><a class="order-detail" href="{% url 'users-order_details' order.id %}"><b>{{ order }}</b></a></td>
+                <td><a class="order-detail" href="{% url 'orders-order_details' order.id %}"><b>{{ order }}</b></a></td>
                 <td>{{ order.get_status_display }}</td>
                 <td> {{ order.date_updated }}</td>
                 <td> {{ order.date_placed }}</td>
-                <td> {{ order.total_price }}</td>
+                <td> <b>{{ order.total_price }} zł</b></td>
               </tr>
             {% endfor %}
             </table>

@@ -47,6 +47,7 @@ class Cart(models.Model):
             "house_number": shipping_address.house_number,
             "flat_number": shipping_address.flat_number,
             "qr_code": shipping_address.qr_code,
+            "city_district": shipping_address.city_district,
             "total_price": self.get_total_price(),
         }
         order = Order.objects.create(**order_data)
@@ -108,14 +109,14 @@ class Order(models.Model):
         max_length=15
     )
     total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name="Suma")
-    shipping_address1 = models.CharField(max_length=60)
-    shipping_address2 = models.CharField(max_length=60)
-    house_number = models.CharField(max_length=60)
-    flat_number = models.CharField(max_length=60, blank=True)
-    qr_code = models.ImageField(upload_to="order_qrcodes", blank=True)
-
-    date_updated = models.DateTimeField(auto_now=True)
-    date_placed = models.DateTimeField(auto_now_add=True)
+    shipping_address1 = models.CharField(max_length=60, verbose_name="Miasto")
+    shipping_address2 = models.CharField(max_length=60, verbose_name="Ulica")
+    house_number = models.CharField(max_length=60, verbose_name="Nr domu")
+    flat_number = models.CharField(max_length=60, blank=True, verbose_name="Nr mieszkania")
+    qr_code = models.ImageField(upload_to="order_qrcodes", blank=True, verbose_name="Kod QR")
+    city_district = models.CharField(max_length=120, blank=True, verbose_name="Dzielnica")
+    date_updated = models.DateTimeField(auto_now=True, verbose_name="Data aktualizacji")
+    date_placed = models.DateTimeField(auto_now_add=True, verbose_name="Data złożenia zamówienia")
 
     def image_tag(self):
         return mark_safe('<img src="/media/{}" width="150" height="150" />'.format(self.qr_code))

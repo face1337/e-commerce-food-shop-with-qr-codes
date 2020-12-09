@@ -12,6 +12,10 @@ class IndexView(TemplateView):
         return context
 
 
+class AboutView(TemplateView):
+    template_name = 'restaurants/about.html'
+
+
 class FoodRestaurantListView(ListView):
     model = Food
     template_name = 'restaurants/restaurant_foods.html'

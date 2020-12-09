@@ -65,11 +65,12 @@ class Address(models.Model):
     class Meta:
         verbose_name_plural = "Adresy użytkowników"
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Użytkownik:")
-    address1 = models.CharField("Miasto:", max_length=60, default='Kraków', editable=False)  # locked for Kraków
-    address2 = models.CharField("Ulica:", max_length=60)
-    house_number = models.CharField("Nr bloku/domu:", max_length=60)
-    flat_number = models.CharField("Nr mieszkania:", max_length=60, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Użytkownik")
+    address1 = models.CharField("Miasto", max_length=60, default='Kraków', editable=False)  # locked for Kraków
+    address2 = models.CharField("Ulica", max_length=60)
+    house_number = models.CharField("Nr bloku/domu", max_length=60)
+    flat_number = models.CharField("Nr mieszkania", max_length=60, blank=True)
+    city_district = models.CharField("Dzielnica", max_length=120, blank=True)
     country = models.CharField(max_length=60, default="Polska", editable=False)
     qr_code = models.ImageField(upload_to='qr_codes', blank=True)
 
@@ -101,23 +102,27 @@ class Address(models.Model):
     def get_address(self):
         return '{} {}, {}, {}'.format(self.address2, self.house_number, self.address1, self.country)
 
-    def get_coordinates(self):
+    def get_address_data(self):
         '''
-        Convert given address to coordinates, used later on for google maps
-        :return: location in coordinates (ex. 49.0215125, 50.434124)
+        Metoda ta pobiera dane na podstawie wpisanego przez użytkownika adresu
+        Następnie z tej metody można pobrać koordynaty
+        :return: Informacje o adresie np. (Ulica, nr, dzielnica, miasto, lng, lat)
         '''
         geolocator = Nominatim(user_agent='users')
-        location = geolocator.geocode(self.get_address())
+        location = geolocator.geocode(self.get_address(), addressdetails=True)
         return location
 
     def clean(self):
-        coordinates = self.get_coordinates()
+        '''
+        Jeśli podany adres w formularzu jest nieprawidłowy, użytkownik dostanie błąd.
+        '''
+        coordinates = self.get_address_data()
         if coordinates is None:
             raise ValidationError("Podaj właściwy adres")
 
     def save(self, *args, **kwargs):
-        latitude = self.get_coordinates().latitude
-        longitude = self.get_coordinates().longitude
+        latitude = self.get_address_data().latitude
+        longitude = self.get_address_data().longitude
         qr_code_img = qrcode.make('https://www.google.pl/maps/place/{},{}'.format(latitude, longitude))
         img = Image.new('RGB', (qr_code_img.pixel_size, qr_code_img.pixel_size), color='white')
         img.paste(qr_code_img)
@@ -125,6 +130,7 @@ class Address(models.Model):
         buffer = BytesIO()
         img.save(buffer, 'PNG')
         self.qr_code.save(fname, File(buffer), save=False)
+        self.city_district = self.get_address_data().raw['address']['city_district']
         img.close()
 
         super().save(*args, **kwargs)

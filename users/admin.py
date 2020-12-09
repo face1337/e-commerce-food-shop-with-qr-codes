@@ -7,8 +7,25 @@ from .models import Address, User
 
 
 class AddressAdmin(admin.ModelAdmin):
-    fields = ('user', 'image_tag', 'read_qr_code', 'address2', 'house_number', 'flat_number', 'address1')
-    readonly_fields = ('address1', 'image_tag', 'read_qr_code',)
+    fields = (
+        'user',
+        'image_tag',
+        'read_qr_code',
+        'address2',
+        'house_number',
+        'flat_number',
+        'address1',
+        'city_district'
+    )
+    readonly_fields = (
+        'address1',
+        'image_tag',
+        'read_qr_code',
+        'address2',
+        'house_number',
+        'flat_number',
+        'city_district'
+    )
 
     list_display = ('user', 'address2', 'house_number', 'flat_number', 'address1')
 

@@ -140,9 +140,9 @@ class AddressSelectView(LoginRequiredMixin, FormView):
         return super().get(request, *args, **kwargs)
 
 
-class OrderListView(LoginRequiredMixin, ListView):
+class UserOrdersListView(LoginRequiredMixin, ListView):
     model = Order
-    template_name = 'users/orders.html'
+    template_name = 'orders/orders.html'
     context_object_name = 'orders'
 
     def get_queryset(self):
@@ -151,7 +151,7 @@ class OrderListView(LoginRequiredMixin, ListView):
 
 class ItemsInOrderListView(LoginRequiredMixin, ListView):
     model = OrderLine
-    template_name = 'users/order_details.html'
+    template_name = 'orders/order_details.html'
     context_object_name = 'order_details'
 
     def get_queryset(self):

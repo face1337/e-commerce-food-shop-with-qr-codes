@@ -9,24 +9,22 @@
             {% csrf_token %}
             {{ formset.management_form }}
             {% for form in formset %}
-                <p>
-                    <b>Produkt: {{ form.instance.food.name }}</b>
-                </p>
-                <p>
-                    Cena: {{ form.instance.food.price }}
-                </p>
+                <b>Produkt: {{ form.instance.food.name }}</b> <br>
+                Cena: {{ form.instance.food.price }}
                 {{ form|crispy }}
             {% endfor %}
-            <button type="submit" class="btn btn-primary">Zapisz zmiany</button>
+            <button type="submit" class="btn btn-success btn-sm">Zapisz zmiany</button>
         </form>
-        Całkowita wartość zamówienia: {{ request.cart.total_price_food }} <br>
         <hr>
             {% if user.is_authenticated %}
-                <a href="{% url 'users-address_select' %}" class="btn btn-primary">Złóż zamówienie</a>
+                <div>
+                    <b>Całkowita wartość zamówienia: {{ request.cart.get_total_price }} zł</b>
+                </div>
+                <a href="{% url 'users-address_select' %}" class="btn btn-success btn-sm text-center">Złóż zamówienie</a>
             {% else %}
                 <p>Aby dokończyć składanie zamówienia musisz się zalogować</p>
-                <a href="{% url "users-register" %}?next={% url 'users-address_select' %}" class="btn btn-primary">Zarejestruj się</a>
-                <a href="{% url "users-login" %}?next={% url 'users-address_select' %}" class="btn btn-primary">Zaloguj się</a>
+                <a href="{% url "users-register" %}?next={% url 'users-address_select' %}" class="btn btn-success btn-sm">Zarejestruj się</a>
+                <a href="{% url "users-login" %}?next={% url 'users-address_select' %}" class="btn btn-success btn-sm">Zaloguj się</a>
             {% endif %}
     {% else %}
         <p>Twój koszyk jest pusty</p>

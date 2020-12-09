@@ -93,6 +93,12 @@ a.article-title:hover {
   font-size: 2.5rem;
 }
 
+.alert-info {
+  color:white;
+  background-color: rgba(0, 105, 60, 0.71);
+  border-color:#00693C;
+}
+
 .btn-outline-info{
   background-color:#A71930;
   color:#FFFFFF;
@@ -100,13 +106,13 @@ a.article-title:hover {
   padding:2px;
 }
 
-.btn-primary{
+.btn-success{
   background-color:#00693C;
   border-color: rgba(0,0,0,.1);
   color:#FFFFFF;
 }
-.btn-primary:hover{
-  background-color:#A71930;
+.btn-success:hover{
+  background-color:#00b669;
   border-color: rgba(0,0,0,.1);
   color:#FFFFFF;
 }
@@ -143,4 +149,10 @@ th,td {
 
 .items{
   margin:auto;
+}
+
+/*inputs and forms */
+.form-control:focus {
+
+  box-shadow: 0 0 0 0.2rem #00b669;
 }
