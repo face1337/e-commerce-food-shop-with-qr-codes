@@ -1,5 +1,6 @@
 {% extends 'restaurants/base.html' %}
 {% block content %}
+    <div class="content-section">
         <h1 class="display-1 text-center">Witaj na Student zamawia!</h1>
         <h1 class="text-center">
             Nasz serwis oferuje wiele potraw oraz dostarcza je na terenie całego Krakowa.
@@ -11,4 +12,6 @@
         <h1 class="display-4 text-center">
            <b><a href="{% url 'restaurant-foods' restaurant.slug %}">Lista posiłków</a></b>
         </h1>
+    </div>
+
 {% endblock %}

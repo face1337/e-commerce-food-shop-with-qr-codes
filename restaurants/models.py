@@ -1,5 +1,10 @@
+from django.core.files.base import ContentFile
 from django.db import models
 from django.utils.safestring import mark_safe
+
+import segno
+# from pyzbar.pyzbar import decode
+from io import BytesIO
 
 
 class Restaurant(models.Model):
@@ -29,12 +34,17 @@ class Category(models.Model):
 
 
 class Food(models.Model):
-    name = models.CharField("Nazwa dania:", max_length=150)
+    name = models.CharField("Nazwa dania", max_length=150)
     category = models.ManyToManyField(Category)
     slug = models.SlugField(max_length=50)
-    price = models.DecimalField("Cena:", max_digits=10, decimal_places=2)  # pole dla ceny
-    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, verbose_name="Restauracja:")  # Klucz obcy do modelu restauracja
+    price = models.DecimalField("Cena", max_digits=10, decimal_places=2)  # pole dla ceny
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, verbose_name="Restauracja")  # Klucz obcy do modelu restauracja
     description = models.TextField(blank=True, max_length=500)
+    # kalorie i ig (cukier dla cukrzyków)
+    calories = models.CharField(blank=True, max_length=50, verbose_name='Kalorie')
+    ig = models.CharField(blank=True, max_length=50, verbose_name='Indeks glikemiczny')
+    # kod qr dla informacji powyżej
+    qr_code = models.ImageField(upload_to='food_qr_codes', blank=True)
 
     class Meta:
         verbose_name = "Posiłek"
@@ -42,6 +52,13 @@ class Food(models.Model):
 
     def __str__(self):  # metoda do wyświetlania obiektu w django admin, dodajemy zł do pola ceny
         return '{} {}'.format(self.name, self. restaurant)
+
+    def save(self, *args, **kwargs):
+        buffer = BytesIO()
+        qr_code_img = segno.make(f'Kalorie: {self.calories}, Indeks glikemiczny: {self.ig}')
+        qr_code_img.save(buffer, kind='png', light='#FFFFFF', scale=4)
+        self.qr_code.save(f'{self.name}-qrcode.png', ContentFile(buffer.getvalue()), save=False)
+        super().save(*args, **kwargs)
 
 
 class FoodImage(models.Model):

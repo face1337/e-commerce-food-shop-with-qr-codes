@@ -1,8 +1,12 @@
 body {
-  background: #f3f3f3;
-  color: #333333;
+  background-color: #f3f3f3;
+  background-image: url("tomatoes-321671_1920.jpg");
+  color: #1c1c1c;
   margin-top: 5rem;
   margin-bottom :5rem;
+  background-size:cover;
+  background-position: center;
+  background-attachment: fixed;
 }
 .footer {
   position: fixed;
@@ -17,10 +21,11 @@ body {
   cursor:default;
 }
 
+/*
 h1, h2, h3, h4, h5, h6 {
   color: #444444;
 }
-
+ */
 ul {
   margin: 0;
 }
@@ -60,8 +65,10 @@ a:hover {
 
 .content-section {
   background: #fafafa;
+  opacity:0.95;
   padding: 10px 20px;
   border: 1px solid rgba(0,0,0,.1);
+  border-radius:5px;
   margin-bottom: 20px;
 }
 
@@ -124,10 +131,10 @@ a.article-title:hover {
 }
 
 .qr-code-thumbnail{
-  width:150px;
-  height:150px;
-  border: 1px solid rgba(0,0,0,.1);
   float:right;
+  width:125px;
+  height:125px;
+  align-self: center;
 }
 
 .order-detail{

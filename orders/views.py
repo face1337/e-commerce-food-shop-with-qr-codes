@@ -27,7 +27,6 @@ def add_to_cart(request):
     cartline, created = CartLine.objects.get_or_create(cart=cart, food=food)
     if not created:
         cartline.quantity += 1
-        cartline.total_price += food.price
         cartline.save()
     messages.info(
         request, "{} dodano do koszyka".format(food.name)

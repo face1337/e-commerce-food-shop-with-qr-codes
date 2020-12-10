@@ -1,4 +1,5 @@
 from django.core.exceptions import ValidationError
+from django.core.files.base import ContentFile
 from django.db import models
 from django.contrib.auth.models import (
     AbstractUser,
@@ -6,7 +7,7 @@ from django.contrib.auth.models import (
 )
 from django.core.files import File
 
-import qrcode
+import segno
 from PIL import Image
 from pyzbar.pyzbar import decode
 from io import BytesIO
@@ -122,14 +123,10 @@ class Address(models.Model):
     def save(self, *args, **kwargs):
         latitude = self.get_address_data().latitude
         longitude = self.get_address_data().longitude
-        qr_code_img = qrcode.make('https://www.google.pl/maps/place/{},{}'.format(latitude, longitude))
-        img = Image.new('RGB', (qr_code_img.pixel_size, qr_code_img.pixel_size), color='white')
-        img.paste(qr_code_img)
-        fname = f'qr-{self.user}.png'
         buffer = BytesIO()
-        img.save(buffer, 'PNG')
-        self.qr_code.save(fname, File(buffer), save=False)
+        qr_code_img = segno.make('https://www.google.pl/maps/place/{},{}'.format(latitude, longitude))
+        qr_code_img.save(buffer, kind='png', light='#FFFFFF', scale=5)
+        self.qr_code.save(f'{self.user}-qrcode.png', ContentFile(buffer.getvalue()), save=False)
         self.city_district = self.get_address_data().raw['address']['city_district']
-        img.close()
 
         super().save(*args, **kwargs)

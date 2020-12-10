@@ -1,23 +1,24 @@
 {% extends 'restaurants/base.html' %}
 {% block content %}
-    <h1>Statystyki zamówień dla dzielnic Krakowa:</h1>
-    <h5>
-        <small class="text-muted">Wyświetlane są tylko dzielnice z których zostały złożone zamówienia</small>
-    </h5>
+    <div class="content-section">
+        <h1>Statystyki zamówień dla dzielnic Krakowa:</h1>
+            <h5>
+                <small class="text-muted">Wyświetlane są tylko dzielnice z których zostały złożone zamówienia</small>
+            </h5>
 
-     <table class="table">
-          <tr>
-            <th scope="col">Dzielnica Krakowa</th>
-            <th scope="col">Ilość zamówień</th>
-          </tr>
+             <table class="table">
+                  <tr>
+                    <th scope="col">Dzielnica</th>
+                    <th scope="col">Ilość zamówień</th>
+                  </tr>
 
-        {% for order in orders %}
-          <tr>
-            <td>{{ order.city_district }}</td>
-            <td>{{ order.id__count }}</td>
-          </tr>
-        {% endfor %}
+                {% for order in orders %}
+                  <tr>
+                    <td>{{ order.city_district }}</td>
+                    <td>{{ order.id__count }}</td>
+                  </tr>
+                {% endfor %}
 
-    </table>
-
+            </table>
+    </div>
 {% endblock %}
