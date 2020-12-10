@@ -3,12 +3,7 @@ from django.core.mail import send_mail
 from django.contrib.auth.forms import UserCreationForm as UsrCreationForm
 from django.contrib.auth.forms import UsernameField
 
-import logging
-
 from .models import Address
-from orders.models import Order
-
-logger = logging.getLogger(__name__)
 
 from . import models
 
@@ -20,9 +15,6 @@ class UserCreationForm(UsrCreationForm):
         field_classes = {"email": UsernameField}
 
     def send_mail(self):
-        logger.info(
-            "Wysyłanie rejestracyjnej wiadomości email do {}".format(self.cleaned_data["email"])
-        )
         message = "Witaj{}".format(format(self.cleaned_data["email"]))
         send_mail(
             "Witamy!",

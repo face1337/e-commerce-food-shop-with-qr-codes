@@ -1,11 +1,15 @@
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.shortcuts import render, get_object_or_404
 from django.contrib import messages
+from django.db.models import Count
+
+from django.views.generic import TemplateView
+from django.contrib.auth.mixins import UserPassesTestMixin
 
 from .models import Cart, CartLine, Order
 from restaurants.models import Food
+
 from .forms import CartLineFormSet
 
 
@@ -46,3 +50,16 @@ def manage_cart(request):
         return render(request, 'orders/cart.html', {"formset": None})
 
     return render(request, 'orders/cart.html', {"formset": formset})
+
+
+class StatisticsView(UserPassesTestMixin, TemplateView):
+    template_name = 'orders/statistics.html'
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['orders'] = Order.objects.values('city_district').annotate(Count("id")).order_by('-id__count')
+        return context
+

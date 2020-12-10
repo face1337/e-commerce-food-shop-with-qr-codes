@@ -11,7 +11,6 @@ from PIL import Image
 from pyzbar.pyzbar import decode
 from io import BytesIO
 
-from django.http import HttpResponse
 from django.utils.safestring import mark_safe
 from geopy.geocoders import Nominatim
 

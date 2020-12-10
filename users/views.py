@@ -20,10 +20,6 @@ from .forms import AddressForm, AddressSelectionForm
 from .models import Address
 from orders.models import OrderLine, Order
 
-import logging
-
-logger = logging.getLogger(__name__)
-
 
 class RegisterView(FormView):
     template_name = 'users/register.html'
@@ -43,10 +39,6 @@ class RegisterView(FormView):
         form.save()  # save user
         email = form.cleaned_data.get("email")
         raw_password = form.cleaned_data.get("password1")
-        logger.info(
-            "Nowa rejestracja dla adresu email={} przy użyciu RegistrationView", email
-        )
-
         user = authenticate(email=email, password=raw_password)
         login(self.request, user)
 

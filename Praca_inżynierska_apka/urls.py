@@ -54,6 +54,8 @@ urlpatterns = [
 
     path('orders/order_details/<int:pk>', user_views.ItemsInOrderListView.as_view(), name='orders-order_details'),
 
+    path('statistics', order_views.StatisticsView.as_view(), name='orders-statistics'),
+
     path('', include('restaurants.urls')),
 ]
 

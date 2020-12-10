@@ -10,10 +10,6 @@ from pyzbar.pyzbar import decode
 from users.models import User, Address
 from restaurants.models import Food
 
-import logging
-
-logger = logging.getLogger(__name__)
-
 
 class Cart(models.Model):
     class Meta:
@@ -99,7 +95,9 @@ class Order(models.Model):
     class OrderStatus(models.TextChoices):
         NEW = 'NOWE', _('Oczekuje na przyjęcie')
         PLACED = 'PRZYJĘTE', _('Zamówienie przyjęte.')
-        COMPLETED = 'ZREALIZOWANE', _('Zamówienie zrealizowane')
+        BEING_PREPARED = 'PRZYGOTOWYWANE', _('W trakcie przygotowania')
+        SENT = 'WYSŁANE', _('Zamówienie wysłane')
+        COMPLETED = 'ZREALIZOWANE', _('Zamówienie dostarczone, zrealizowane')
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Użytkownik")
     status = models.CharField(
