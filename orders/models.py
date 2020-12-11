@@ -31,7 +31,7 @@ class Cart(models.Model):
         return sum(i.quantity for i in self.cartline_set.all())
 
     def get_total_price(self):
-        return sum(i.food.price for i in self.cartline_set.all())*self.count()
+        return sum(i.food.price*i.quantity for i in self.cartline_set.all())
 
     count.short_description = "Ilość: "
 

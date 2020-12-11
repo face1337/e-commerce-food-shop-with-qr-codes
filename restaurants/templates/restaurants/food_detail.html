@@ -1,20 +1,33 @@
 {% extends 'restaurants/base.html' %}
 {% block content %}
     <article class="content-section">
-        <h3>{{ food_detail.name }}</h3>
+        <div class="container">
+            <h3>{{ food_detail.name }}</h3>
+            <div class="row justify-content-center">
+
+                <div class="col-">
+                    {% for image in food_detail.foodimage_set.all%}
+                        <img class="img-fluid img-thumbnail"  src="{{ image.thumbnail.url }}" alt="FoodImage">
+                    {% endfor %}
+                </div>
+
+                <div class="col align-self-center">
+                    Cena: {{ food_detail.price }} zł <br>
+                    {{ food_detail.description|linebreaks }}
+                </div>
+
+                <div class="col-">
+                    {% if food_detail.qr_code %}
+                        <img class="img-fluid" src="{{ food_detail.qr_code.url }}">
+                    {% endif %}
+                </div>
+            </div>
+            <div class="row justify-content-end">
+                <a class="btn btn-success mt-2" href="{% url 'orders-add_to_cart' %}?food_id={{ food.id }}">Dodaj do koszyka {{ food.price }} zł</a>
+            </div>
+        </div>
         <hr>
-            <div style="float:left">
-                Cena: {{ food_detail.price }} zł <br>
-                {{ food_detail.description }} <br>
-                <a href="{% url 'orders-add_to_cart' %}?food_id={{ food_detail.id }}">Dodaj do koszyka</a><br>
-                <img class="img-fluid" src="{{ food_detail.qr_code.url }}">
-            </div>
-             <div style="float:right">
-                {% for image in food_detail.foodimage_set.all%}
-                    <img class="img-fluid img-thumbnail"  src="{{ image.thumbnail.url }}" alt="FoodImage">
-                {% endfor %}
-            </div>
-            <div style="clear:both"></div>
+    <a href="{% url 'restaurant-foods' food_detail.restaurant.slug %}">Powrót</a>
     </article>
 
 {% endblock %}

@@ -55,7 +55,7 @@ class Food(models.Model):
 
     def save(self, *args, **kwargs):
         buffer = BytesIO()
-        qr_code_img = segno.make(f'Kalorie: {self.calories}, Indeks glikemiczny: {self.ig}')
+        qr_code_img = segno.make(f'Informacje dodatkowe:\n Kalorie: {self.calories}\n Indeks glikemiczny: {self.ig}')
         qr_code_img.save(buffer, kind='png', light='#FFFFFF', scale=4)
         self.qr_code.save(f'{self.name}-qrcode.png', ContentFile(buffer.getvalue()), save=False)
         super().save(*args, **kwargs)

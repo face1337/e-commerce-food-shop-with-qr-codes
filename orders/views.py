@@ -51,11 +51,8 @@ def manage_cart(request):
     return render(request, 'orders/cart.html', {"formset": formset})
 
 
-class StatisticsView(UserPassesTestMixin, TemplateView):
+class StatisticsView(TemplateView):
     template_name = 'orders/statistics.html'
-
-    def test_func(self):
-        return self.request.user.is_staff
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

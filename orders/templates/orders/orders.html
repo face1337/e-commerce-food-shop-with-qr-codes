@@ -1,26 +1,29 @@
 {% extends "restaurants/base.html" %}
 {% block content %}
-    <h1>Twoje zamówienia:</h1>
+
     <div class="content-section">
+        <h1>Twoje zamówienia:</h1>
         {% if orders %}
-            <table class="table">
-              <tr>
-                <th scope="col">Zamówienie</th>
-                <th scope="col">Status</th>
-                <th scope="col">Data aktualizacji statusu zamówienia</th>
-                <th scope="col">Data złożenia zamówienia</th>
-                <th scope="col">Całkowita wartość zamówienia</th>
-              </tr>
-            {% for order in orders %}
-              <tr>
-                <td><a class="order-detail" href="{% url 'orders-order_details' order.id %}"><b>{{ order }}</b></a></td>
-                <td>{{ order.get_status_display }}</td>
-                <td> {{ order.date_updated }}</td>
-                <td> {{ order.date_placed }}</td>
-                <td> <b>{{ order.total_price }} zł</b></td>
-              </tr>
+            <div style="overflow-x:auto">
+                <table class="table">
+                  <tr>
+                    <th scope="col">Zamówienie</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Data aktualizacji statusu zamówienia</th>
+                    <th scope="col">Data złożenia zamówienia</th>
+                    <th scope="col">Całkowita wartość zamówienia</th>
+                  </tr>
+                {% for order in orders %}
+                  <tr>
+                    <td><a class="order-detail" href="{% url 'orders-order_details' order.id %}"><b>{{ order }}</b></a></td>
+                    <td>{{ order.get_status_display }}</td>
+                    <td> {{ order.date_updated }}</td>
+                    <td> {{ order.date_placed }}</td>
+                    <td> <b>{{ order.total_price }} zł</b></td>
+                  </tr>
             {% endfor %}
-            </table>
+                </table>
+            </div>
         {% else%}
             <p>Historia twoich zamówień jest pusta</p>
         {% endif %}

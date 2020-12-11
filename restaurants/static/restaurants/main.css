@@ -8,6 +8,15 @@ body {
   background-position: center;
   background-attachment: fixed;
 }
+@media all and (max-width:600px) {
+    h1 {font-size:1.3rem}
+    h2 {font-size:1.2rem}
+    h3 {font-size:1rem}
+    h4 {font-size:0.95rem}
+    h5 {font-size:0.9rem}
+    .display-1 {font-size:3rem}
+    .display-4 {font-size:2.5rem}
+}
 .footer {
   position: fixed;
   bottom: 0;
@@ -137,6 +146,12 @@ a.article-title:hover {
   align-self: center;
 }
 
+.mini-qr{
+  width:80px;
+  height:80px;
+  float:right;
+}
+
 .order-detail{
   color: #003366;
 }
@@ -147,7 +162,6 @@ a.article-title:hover {
 }
 
 .table{
-  table-layout: fixed;
   width: 100%;
 }
 

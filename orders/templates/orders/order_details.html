@@ -1,17 +1,19 @@
 {% extends "restaurants/base.html" %}
 {% block content %}
-    <h1>Szczegóły zamówienia :</h1>
     <div class="content-section">
+       <h1>Szczegóły zamówienia :</h1>
         {% if order_details %}
             <table class="table">
-              <tr>
+              <tr">
                 <th scope="col">Produkt</th>
                 <th scope="col">Cena</th>
+                <th scope="col">Dodatkowe informacje o produkcie</th>
               </tr>
             {% for order in order_details %}
               <tr>
-                    <td>{{ order.product.name }}</td>
-                    <td>{{ order.product.price }}</td>
+                    <td style="vertical-align: middle">{{ order.product.name }}</td>
+                    <td style="vertical-align: middle">{{ order.product.price }}</td>
+                    <td style="vertical-align: middle"><img class="mini-qr" src="{{ order.product.qr_code.url }}"></td>
               </tr>
             {% endfor %}
             </table>
