@@ -16,7 +16,7 @@
             <div class="row justify-content-center">
                 <div class="col-">
                     {% for img in food.foodimage_set.all %}
-                        <img class="img-fluid img-thumbnail" src="{{ img.thumbnail.url }}" alt="product thumbnail">
+                        <img class="img-fluid img-thumbnail mb-2 mt-2" src="{{ img.thumbnail.url }}" alt="product thumbnail">
                     {% endfor %}
                 </div>
                 <div class="col-md align-self-center">
