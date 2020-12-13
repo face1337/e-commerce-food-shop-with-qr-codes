@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.core.validators import MinValueValidator
 from django.utils.translation import gettext_lazy as _
 from django.utils.safestring import mark_safe
+from django.core.mail import send_mail
 
 from PIL import Image
 from pyzbar.pyzbar import decode
@@ -47,7 +48,7 @@ class Cart(models.Model):
             "total_price": self.get_total_price(),
         }
         order = Order.objects.create(**order_data)
-        count = 0
+        products = []
         for line in self.cartline_set.all():
             for item in range(line.quantity):
                 order_line_data = {
@@ -56,7 +57,21 @@ class Cart(models.Model):
                     "price": line.food.price,
                 }
                 order_line = OrderLine.objects.create(**order_line_data)
-                count += 1
+                products.append(line.food.name)
+        message = 'Dziękujemy za złożenie zamówienia. \n' \
+                  'Produkty które zamówiłeś to: \n \n' \
+                  '   -'
+
+        message += '\n   -'.join(products)
+        message += f'\n \n Wartość zamówienia: {self.get_total_price()} zł'
+        message += '\n \n Studentzamawia.pl'
+        send_mail(
+            f'Zamówienie użytkownika {self.user}',
+            message,
+            'administracja@studentzamawia.pl',
+            [self.user],
+            fail_silently=True,
+        )
         self.status = Cart.CartStatus.SUBMITTED
         self.save()
         return order_line
@@ -99,7 +114,7 @@ class Order(models.Model):
         SENT = 'WYSŁANE', _('Zamówienie wysłane')
         COMPLETED = 'ZREALIZOWANE', _('Zamówienie dostarczone, zrealizowane')
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Użytkownik")
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, verbose_name="Użytkownik", null=True)
     status = models.CharField(
         choices=OrderStatus.choices,
         default=OrderStatus.NEW,
@@ -143,7 +158,7 @@ class OrderLine(models.Model):
         verbose_name = "Produkt"
         verbose_name_plural = "Produkty"
 
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True)
     product = models.ForeignKey(Food, on_delete=models.PROTECT, default=1, verbose_name="Produkt")  # if food deleted, order still in history
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name="Koszt")
 

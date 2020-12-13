@@ -15,11 +15,14 @@ class UserCreationForm(UsrCreationForm):
         field_classes = {"email": UsernameField}
 
     def send_mail(self):
-        message = "Witaj{}".format(format(self.cleaned_data["email"]))
+        message = f'Witaj, {self.cleaned_data["email"]}!\n' \
+                  'Dziękujemy za założenie konta na Studentzamawia.pl' \
+                  '\n \n' \
+                  'Wiadomość wygenerowana automatycznie (proszę na nią nie odpowiadać).'
         send_mail(
-            "Witamy!",
+            'Witamy!',
             message,
-            "administracja@studentzamawia.domain",
+            'administracja@studentzamawia.pl',
             [self.cleaned_data["email"]],
             fail_silently=True,
         )
