@@ -14,7 +14,11 @@
         </form>
         <div class="border-top pt-3">
             <small class="text-muted">Nie masz konta?
-                <a class="ml-2" href="{% url 'users-register' %}">Zarejestruj się</a></small>
+                <a class="ml-2" href="{% url 'users-register' %}">Zarejestruj się</a>
+            </small>
+            <small class="text-muted">
+                <a class="ml-2" href="{% url 'password_reset' %}">Resetuj hasło</a>
+            </small>
         </div>
     </div>
 {% endblock content %}

@@ -20,6 +20,7 @@ from django.urls import include, path
 from django.conf.urls.static import static
 from django.conf import settings
 from django.views.generic import TemplateView
+from users.forms import ValidateEmailForgotPassword
 
 from users import views as user_views
 from orders import views as order_views
@@ -29,33 +30,31 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('register/', user_views.RegisterView.as_view(), name='users-register'),
-
     path('login/', user_views.MyLoginView.as_view(template_name='users/login.html'), name='users-login'),
-
     path('logout/', auth_views.LogoutView.as_view(template_name='users/logout.html'), name='users-logout'),
+    path('reset-password/', auth_views.PasswordResetView.as_view(template_name='users/password_reset.html',
+                                                                 form_class=ValidateEmailForgotPassword),
+         name='password_reset'),
+    path('reset-password-confirm/<uidb64>/<token>', auth_views.PasswordResetConfirmView.as_view(
+         template_name='users/password_reset_confirm.html'), name='password_reset_confirm'),
+    path('reset-password/done', auth_views.PasswordResetDoneView.as_view(
+         template_name='users/password_reset_done.html'), name='password_reset_done'),
+    path('reset-password/complete', auth_views.PasswordResetCompleteView.as_view(
+         template_name='users/password_reset_complete.html'), name='password_reset_complete'),
 
     path('address/',user_views.AddressListView.as_view(), name='users-address_list'),
-
     path('address/create', user_views.AddressCreateView.as_view(), name='users-address_create'),
-
     path('address/<int:pk>/update', user_views.AddressUpdateView.as_view(), name='users-address_update'),
-
     path('address/<int:pk>/delete', user_views.AddressDeleteView.as_view(), name='users-address_confirm_delete'),
 
     path('add_to_cart/', order_views.add_to_cart, name='orders-add_to_cart'),
-
     path('cart/', order_views.manage_cart, name='orders-cart'),
-
     path('orders/address_select', user_views.AddressSelectView.as_view(), name='users-address_select'),
-
     path('orders/checkout', TemplateView.as_view(template_name="orders/order_done.html"), name='orders-order_done'),
-
     path('orders/<str:email>', user_views.UserOrdersListView.as_view(), name='orders-orders'),
-
     path('orders/order_details/<int:pk>', user_views.ItemsInOrderListView.as_view(), name='orders-order_details'),
 
     path('statistics', order_views.StatisticsView.as_view(), name='orders-statistics'),
-
     path('', include('restaurants.urls')),
 ]
 

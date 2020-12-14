@@ -1,9 +1,10 @@
 from django import forms
+from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
-from django.contrib.auth.forms import UserCreationForm as UsrCreationForm
+from django.contrib.auth.forms import UserCreationForm as UsrCreationForm, PasswordResetForm
 from django.contrib.auth.forms import UsernameField
 
-from .models import Address
+from .models import Address, User
 
 from . import models
 
@@ -43,4 +44,10 @@ class AddressSelectionForm(forms.Form):
         self.fields['shipping_address'].queryset = queryset
 
 
+class ValidateEmailForgotPassword(PasswordResetForm):
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if not User.objects.filter(email__iexact=email).exists():
+            raise ValidationError("Użytkownik o podanym adresie e-mail nie jest zarejestrowany")
+        return email
 
