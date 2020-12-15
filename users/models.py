@@ -85,10 +85,8 @@ class Address(models.Model):
         return mark_safe('<img src="/media/{}" width="150" height="150" />'.format(self.qr_code))
 
     def read_qr_code(self):
-        '''
-        https://www.programcreek.com/python/example/123813/pyzbar.pyzbar.decode
-        :return:
-        '''
+        #https://www.programcreek.com/python/example/123813/pyzbar.pyzbar.decode
+
         data = decode(Image.open(self.qr_code))
         return mark_safe(
             '<a href="{}" target="_blank">'
@@ -97,6 +95,7 @@ class Address(models.Model):
         )
 
     read_qr_code.short_description = 'Skanuj kod'
+
     image_tag.short_description = 'Kod QR'
 
     def get_address(self):

@@ -5,21 +5,21 @@
     <h2>Koszyk</h2>
     {% if formset %}
         <h3>Twoje produkty:</h3>
-        <form method="POST">
-            {% csrf_token %}
-            {{ formset.management_form }}
-            {% for form in formset %}
-                <b>Produkt: {{ form.instance.food.name }}</b> <br>
-                Cena: {{ form.instance.food.price }}
-                {{ form|crispy }}
-            {% endfor %}
-            <button type="submit" class="btn btn-success btn-sm">Zapisz zmiany</button>
-        </form>
+            <form method="POST">
+                {% csrf_token %}
+                {{ formset.management_form }}
+                {% for form in formset %}
+                    <b>{{ form.instance.food.name }}</b>
+                    {{ form.instance.food.price }} zł
+                    {{ form|crispy }}
+                {% endfor %}
+                <button type="submit" class="btn btn-success btn-sm">Zapisz zmiany</button>
+            </form>
         <hr>
+            <div>
+                <b>Całkowita wartość zamówienia: {{ request.cart.get_total_price }} zł</b>
+            </div>
             {% if user.is_authenticated %}
-                <div>
-                    <b>Całkowita wartość zamówienia: {{ request.cart.get_total_price }} zł</b>
-                </div>
                 <a href="{% url 'users-address_select' %}" class="btn btn-success btn-sm text-center">Złóż zamówienie</a>
             {% else %}
                 <p>Aby dokończyć składanie zamówienia musisz się zalogować</p>
@@ -29,5 +29,6 @@
     {% else %}
         <p>Twój koszyk jest pusty</p>
     {% endif %}
+    <a href="{% url 'restaurants-list' %}">Dodaj produkty do koszyka</a>
     </div>
 {% endblock content%}

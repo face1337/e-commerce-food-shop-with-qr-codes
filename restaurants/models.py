@@ -3,7 +3,6 @@ from django.db import models
 from django.utils.safestring import mark_safe
 
 import segno
-# from pyzbar.pyzbar import decode
 from io import BytesIO
 
 
@@ -12,6 +11,7 @@ class Restaurant(models.Model):
     address = models.CharField("Adres:", max_length=255)
     city = models.CharField("Miasto:", max_length=150, default="Kraków")
     slug = models.SlugField("URL:",max_length=50)
+    image = models.ImageField(upload_to='restaurant_logos', default='restaurant-default.png')
 
     class Meta:
         verbose_name = "Restauracja"

@@ -1,6 +1,6 @@
 from django.test import TestCase, RequestFactory, Client
 
-from restaurants.views import IndexView
+from restaurants.views import IndexView, FoodRestaurantListView
 
 
 class TestHomePage(TestCase):
@@ -11,6 +11,3 @@ class TestHomePage(TestCase):
 
         context = view.get_context_data()
         self.assertIn('restaurant', context)
-
-class TestFoodRestaurantListView(TestCase):
-    pass

@@ -1,0 +1,24 @@
+{% extends 'restaurants/base.html' %}
+{% block content %}
+    <article class="content-section">
+    <h1 class="text-center">Dostępne restauracje</h1>
+    {% for restaurant in restaurants %}
+        <div class="row">
+            <div class="col-">
+                <a href="{% url 'restaurant-foods' restaurant.slug %}">
+                    <img class="rounded-circle img-thumbnail" src="{{ restaurant.image.url }}">
+                </a>
+            </div>
+
+            <div class="col">
+                <a href="{% url 'restaurant-foods' restaurant.slug %}"><h4>{{ restaurant.name }}</h4></a>
+                    <h5>Adres: {{ restaurant.city }}, {{ restaurant.address }}</h5>
+            </div>
+        </div>
+        <hr>
+        {% if forloop.last %}
+            <a href="{% url 'restaurants-index' %}">Powrót do strony głównej</a>
+        {% endif %}
+    {% endfor %}
+    </article>
+{% endblock %} %}

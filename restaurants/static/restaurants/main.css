@@ -180,3 +180,7 @@ th,td {
 
   box-shadow: 0 0 0 0.2rem #00b669;
 }
+
+input{
+  width:30px;
+}
