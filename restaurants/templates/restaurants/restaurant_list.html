@@ -3,10 +3,10 @@
     <article class="content-section">
     <h1 class="text-center">Dostępne restauracje</h1>
     {% for restaurant in restaurants %}
-        <div class="row">
+        <div class="row align-items-center">
             <div class="col-">
                 <a href="{% url 'restaurant-foods' restaurant.slug %}">
-                    <img class="rounded-circle img-thumbnail" src="{{ restaurant.image.url }}">
+                    <img class="rounded-circle img-fluid" src="{{ restaurant.image.url }}">
                 </a>
             </div>
 
