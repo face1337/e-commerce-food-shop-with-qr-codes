@@ -42,7 +42,7 @@ def manage_cart(request):
         formset = CartLineFormSet(request.POST, instance=request.cart)
         if formset.is_valid():
             formset.save()
-            return HttpResponseRedirect('/cart')
+            return HttpResponseRedirect('/koszyk')
     else:
         formset = CartLineFormSet(instance=request.cart)
 

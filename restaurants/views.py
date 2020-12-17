@@ -1,8 +1,8 @@
 from django.http import Http404
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.views.generic import DetailView, ListView, TemplateView
 from django.utils.translation import gettext_lazy as _
-from .models import Restaurant, Food
+from .models import Restaurant, Food, Category
 
 
 class IndexView(TemplateView):
@@ -28,6 +28,11 @@ class FoodRestaurantListView(ListView):
     model = Food
     template_name = 'restaurants/restaurant_foods.html'
     context_object_name = 'foods'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context=super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.all()
+        return context
 
     def get_queryset(self):
         restaurant = get_object_or_404(Restaurant, slug=self.kwargs.get('slug'))

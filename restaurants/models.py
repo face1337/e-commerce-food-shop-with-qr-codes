@@ -50,6 +50,9 @@ class Food(models.Model):
         verbose_name = "Posiłek"
         verbose_name_plural="Posiłki"
 
+    def get_categories(self):
+        return self.category.distinct()
+
     def __str__(self):  # metoda do wyświetlania obiektu w django admin, dodajemy zł do pola ceny
         return '{} {}'.format(self.name, self. restaurant)
 

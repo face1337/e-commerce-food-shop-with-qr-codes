@@ -91,6 +91,7 @@ class AddressUpdateView(LoginRequiredMixin, UpdateView):
         "flat_number",
     ]
     success_url = reverse_lazy("users-address_list")
+    template_name = 'users/address_update.html'
 
     def get_queryset(self):
         return self.model.objects.filter(user=self.request.user)
@@ -107,7 +108,7 @@ class AddressDeleteView(LoginRequiredMixin, DeleteView):
 class AddressSelectView(LoginRequiredMixin, FormView):
     template_name = 'users/address_select.html'
     form_class = AddressSelectionForm
-    success_url = reverse_lazy("orders-order_done")
+    success_url = reverse_lazy('restaurants-list')
 
     def get_form_kwargs(self):
         '''
@@ -123,6 +124,9 @@ class AddressSelectView(LoginRequiredMixin, FormView):
         cart = self.request.cart
         cart.user = self.request.user
         cart.make_order(form.cleaned_data['shipping_address'])
+        messages.info(
+            self.request, "Pomyślnie złożono zamówienie. Aby sprawdzić jego status przejdź do zakładki 'zamówienia'."
+        )
 
         return super().form_valid(form)
 

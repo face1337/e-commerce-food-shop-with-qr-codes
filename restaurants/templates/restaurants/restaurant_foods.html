@@ -2,6 +2,12 @@
 {% block content %}
     <article class="content-section">
     {% if foods %}
+        <nav class="navbar">
+            <a class="navbar-brand mr-4" href="{% url 'restaurants-index' %}"><b>Wszystkie</b></a>
+            {% for category in categories %}
+                <a href="#">{{ category }}</a>
+            {% endfor %}
+        </nav>
         {% for food in foods %}
             {% if forloop.first %} <!-- display restaurant name only once -->
                 <h1>Posiłki restauracji {{ food.restaurant.name }}</h1>
