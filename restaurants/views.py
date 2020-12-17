@@ -1,5 +1,7 @@
+from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.views.generic import DetailView, ListView, TemplateView
+from django.utils.translation import gettext_lazy as _
 from .models import Restaurant, Food
 
 
@@ -36,3 +38,15 @@ class FoodDetailView(DetailView):
     model = Food
     template_name = 'restaurants/food_detail.html'
     context_object_name = 'food_detail'
+
+    def get_object(self, queryset=None):
+        if queryset is None:
+            queryset = self.get_queryset()
+        restaurant_slug = self.kwargs.get('restaurant_slug', None)
+        food_slug = self.kwargs.get('food_slug', None)
+        food_id = self.kwargs.get('food_id')
+        try:
+            obj = queryset.get(slug=food_slug, restaurant__slug=restaurant_slug)
+        except queryset.model.DoesNotExist:
+            raise Http404(_("Nie znaleziono takiego posiłku"))
+        return obj

@@ -12,7 +12,7 @@
             {% endif %}
             <hr>
             <div class="container">
-              <h2 class="text-center"><a href="{% url 'food-detail' food.slug %}">{{ food.name }}</a></h2>
+              <h2 class="text-center"><a href="{% url 'food-detail' food.restaurant.slug food.slug %}">{{ food.name }}</a></h2>
                 <div class="row justify-content-center">
                     <div class="col-">
                         {% for img in food.foodimage_set.all %}

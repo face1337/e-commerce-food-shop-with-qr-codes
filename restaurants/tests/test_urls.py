@@ -1,6 +1,6 @@
 from django.urls import reverse, resolve
 from django.test import TestCase
-from restaurants.views import IndexView, AboutView, FoodRestaurantListView, FoodDetailView
+from restaurants.views import IndexView, AboutView, FoodRestaurantListView, FoodDetailView, RestaurantListView
 
 
 class TestUrls(TestCase):
@@ -16,6 +16,10 @@ class TestUrls(TestCase):
         url = reverse('restaurants-about')
         self.assertEquals(resolve(url).func.view_class, AboutView)
 
+    def test_restaurant_list_url(self):
+        url = reverse('restaurants-list')
+        self.assertEquals(resolve(url).func.view_class, RestaurantListView)
+
     def test_food_list_url(self):
         url = reverse('restaurant-foods', args=['test-slug'])
         self.assertEquals(resolve(url).func.view_class, FoodRestaurantListView)
@@ -23,5 +27,7 @@ class TestUrls(TestCase):
     def test_food_detail_url(self):
         url = reverse('food-detail', args=['test-slug'])
         self.assertEquals(resolve(url).func.view_class, FoodDetailView)
+
+
 
 

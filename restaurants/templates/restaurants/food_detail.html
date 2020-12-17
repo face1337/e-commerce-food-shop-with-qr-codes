@@ -23,11 +23,11 @@
                 </div>
             </div>
             <div class="row justify-content-end">
-                <a class="btn btn-success mt-2" href="{% url 'orders-add_to_cart' %}?food_id={{ food.id }}">Dodaj do koszyka {{ food.price }} zł</a>
+                <a class="btn btn-success mt-2" href="{% url 'orders-add_to_cart' %}?food_id={{ food_detail.id }}">Dodaj do koszyka {{ food_detail.price }} zł</a>
             </div>
         </div>
         <hr>
-    <a href="{% url 'restaurant-foods' food_detail.restaurant.slug %}">Powrót</a>
+    <a href="{% url 'restaurants-foods' food_detail.restaurant.slug %}">Powrót</a>
     </article>
 
 {% endblock %}

@@ -5,13 +5,13 @@
     {% for restaurant in restaurants %}
         <div class="row align-items-center">
             <div class="col-">
-                <a href="{% url 'restaurant-foods' restaurant.slug %}">
+                <a href="{% url 'restaurants-foods' restaurant.slug %}">
                     <img class="rounded-circle img-fluid" src="{{ restaurant.image.url }}">
                 </a>
             </div>
 
             <div class="col">
-                <a href="{% url 'restaurant-foods' restaurant.slug %}"><h4>{{ restaurant.name }}</h4></a>
+                <a href="{% url 'restaurants-foods' restaurant.slug %}"><h4>{{ restaurant.name }}</h4></a>
                     <h5>Adres: {{ restaurant.city }}, {{ restaurant.address }}</h5>
             </div>
         </div>
