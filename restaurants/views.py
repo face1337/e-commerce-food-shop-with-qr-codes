@@ -9,7 +9,7 @@ class IndexView(TemplateView):
     template_name = 'restaurants/index.html'
 
     def get_context_data(self, **kwargs):
-        context = super(IndexView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context['restaurant'] = Restaurant.objects.all()
         return context
 
@@ -29,14 +29,40 @@ class FoodRestaurantListView(ListView):
     template_name = 'restaurants/restaurant_foods.html'
     context_object_name = 'foods'
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context=super().get_context_data(**kwargs)
-        context['categories'] = Category.objects.all()
+    def get_queryset(self):
+        restaurant = get_object_or_404(Restaurant, slug=self.kwargs.get('slug'))
+        return Food.objects.filter(restaurant=restaurant)
+
+    def get_restaurant_id(self):
+        restaurant = get_object_or_404(Restaurant, slug=self.kwargs.get('slug'))
+        return restaurant.id
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        rest_id = self.get_restaurant_id()
+        context['categories'] = Category.objects.filter(food__restaurant__id=rest_id).distinct()
+
+        return context
+
+
+class FoodByCategoryListView(ListView):
+    model = Food
+    template_name = 'restaurants/restaurant_foods-category.html'
+    context_object_name = 'food_by_category'
+
+    def get_restaurant_id(self):
+        restaurant = get_object_or_404(Restaurant, slug=self.kwargs.get('slug'))
+        return restaurant.id
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        rest_id = self.get_restaurant_id()
+        context['categories'] = Category.objects.filter(food__restaurant__id=rest_id).distinct()
         return context
 
     def get_queryset(self):
         restaurant = get_object_or_404(Restaurant, slug=self.kwargs.get('slug'))
-        return Food.objects.filter(restaurant=restaurant)
+        return Food.objects.filter(restaurant=restaurant, category=self.kwargs.get('category__id'))
 
 
 class FoodDetailView(DetailView):
@@ -49,7 +75,6 @@ class FoodDetailView(DetailView):
             queryset = self.get_queryset()
         restaurant_slug = self.kwargs.get('restaurant_slug', None)
         food_slug = self.kwargs.get('food_slug', None)
-        food_id = self.kwargs.get('food_id')
         try:
             obj = queryset.get(slug=food_slug, restaurant__slug=restaurant_slug)
         except queryset.model.DoesNotExist:

@@ -1,17 +1,21 @@
 {% extends 'restaurants/base.html' %}
 {% block content %}
     <article class="content-section">
-    {% if foods %}
+    {% if food_by_category %}
         <nav class="navbar navbar-expand-md">Kategorie:
-            <a class="nav-item nav-link mx-auto" href="{% url 'restaurants-foods' view.kwargs.slug %}"><u>Wszystkie</u></a>
+            <a class="nav-item nav-link mx-auto" href="{% url 'restaurants-foods' view.kwargs.slug %}">Wszystkie</a>
             {% for category in categories %}
-                <a class="nav-link mx-auto" href="{% url 'restaurants-food-by-category' view.kwargs.slug category.id %}">
-                    {{ category }}
-                </a>
+                {% if category.id == view.kwargs.category__id %}
+                        <a class="nav-link mx-auto" href="{% url 'restaurants-food-by-category' view.kwargs.slug category.id %}">
+                            <u>{{ category }}</u>
+                        </a>
+                {% else %}
+                    <a class="nav-link mx-auto" href="{% url 'restaurants-food-by-category' view.kwargs.slug category.id %}">{{ category }}</a>
+                {% endif %}
             {% endfor %}
         </nav>
         <hr>
-        {% for food in foods %}
+        {% for food in food_by_category %}
             {% if forloop.first %} <!-- display restaurant name only once -->
                 <h1>Posiłki restauracji {{ food.restaurant.name }}</h1>
                 <span>
