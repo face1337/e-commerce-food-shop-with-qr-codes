@@ -3,10 +3,21 @@
     <article class="content-section">
     {% if foods %}
         <nav class="navbar navbar-expand-md">Kategorie:
-            <a class="nav-item nav-link mx-auto" href="{% url 'restaurants-foods' view.kwargs.slug %}"><u>Wszystkie</u></a>
+            <a class="nav-item nav-link" href="{% url 'restaurants-foods' view.kwargs.slug %}">
+                {% if view.kwargs.category__id == None %}
+                    <b>Wszystkie</b>
+                {% else %}
+                    Wszystkie
+                {% endif %}
+            </a>
             {% for category in categories %}
-                <a class="nav-link mx-auto" href="{% url 'restaurants-food-by-category' view.kwargs.slug category.id %}">
-                    {{ category }}
+
+                <a class="nav-item nav-link" href="{% url 'restaurants-foods-category' view.kwargs.slug category.id %}">
+                    {% if category.id == view.kwargs.category__id %}
+                        <b>{{ category }}</b>
+                    {% else %}
+                        {{ category }}
+                    {% endif %}
                 </a>
             {% endfor %}
         </nav>

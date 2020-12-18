@@ -1,7 +1,8 @@
 from django.http import Http404
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404
 from django.views.generic import DetailView, ListView, TemplateView
 from django.utils.translation import gettext_lazy as _
+
 from .models import Restaurant, Food, Category
 
 
@@ -30,39 +31,18 @@ class FoodRestaurantListView(ListView):
     context_object_name = 'foods'
 
     def get_queryset(self):
-        restaurant = get_object_or_404(Restaurant, slug=self.kwargs.get('slug'))
-        return Food.objects.filter(restaurant=restaurant)
-
-    def get_restaurant_id(self):
-        restaurant = get_object_or_404(Restaurant, slug=self.kwargs.get('slug'))
-        return restaurant.id
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        rest_id = self.get_restaurant_id()
-        context['categories'] = Category.objects.filter(food__restaurant__id=rest_id).distinct()
-
-        return context
-
-
-class FoodByCategoryListView(ListView):
-    model = Food
-    template_name = 'restaurants/restaurant_foods-category.html'
-    context_object_name = 'food_by_category'
-
-    def get_restaurant_id(self):
-        restaurant = get_object_or_404(Restaurant, slug=self.kwargs.get('slug'))
-        return restaurant.id
+        # restaurant = get_object_or_404(Restaurant, slug=self.kwargs.get('slug'))
+        food = Food.objects.filter(restaurant__slug=self.kwargs.get('slug'))
+        food_by_category = food.filter(category=self.kwargs.get('category__id'))
+        if self.kwargs.get('category__id'):
+            return food_by_category
+        return food
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        rest_id = self.get_restaurant_id()
-        context['categories'] = Category.objects.filter(food__restaurant__id=rest_id).distinct()
-        return context
+        context['categories'] = Category.objects.filter(food__restaurant__slug=self.kwargs.get('slug')).distinct()
 
-    def get_queryset(self):
-        restaurant = get_object_or_404(Restaurant, slug=self.kwargs.get('slug'))
-        return Food.objects.filter(restaurant=restaurant, category=self.kwargs.get('category__id'))
+        return context
 
 
 class FoodDetailView(DetailView):
