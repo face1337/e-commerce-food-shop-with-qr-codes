@@ -74,6 +74,7 @@ a:hover {
 
 .content-section {
   background: #fafafa;
+  position:relative;
   opacity:0.95;
   padding: 10px 20px;
   border: 1px solid rgba(0,0,0,.1);
@@ -172,6 +173,39 @@ th,td {
 .items{
   margin:auto;
 }
+
+.scan-qr-container{
+  position:relative;
+}
+
+.read-qr{
+  opacity:1;
+  display:block;
+  width:100%;
+  height:auto;
+  transition: .5s ease-in;
+  backface-visibility: hidden;
+}
+
+.middle {
+  transition: .5s ease;
+  opacity:0;
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.scan-qr-container:hover .qr-code{
+  opacity:0.3;
+}
+
+.scan-qr-container:hover .middle{
+  opacity:1;
+}
+
+.
 
 
 /*inputs and forms */

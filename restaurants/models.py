@@ -1,9 +1,12 @@
 from django.core.files.base import ContentFile
 from django.db import models
 from django.utils.safestring import mark_safe
+from users.models import Address
 
 import segno
 from io import BytesIO
+from PIL import Image
+from pyzbar.pyzbar import decode
 
 
 class Restaurant(models.Model):
@@ -52,6 +55,10 @@ class Food(models.Model):
 
     def get_categories(self):
         return self.category.distinct()
+
+    def read_qr_code(self):
+        data = decode(Image.open(self.qr_code))
+        return mark_safe(data[0].data.decode())
 
     def __str__(self):  # metoda do wyświetlania obiektu w django admin, dodajemy zł do pola ceny
         return '{} {}'.format(self.name, self. restaurant)

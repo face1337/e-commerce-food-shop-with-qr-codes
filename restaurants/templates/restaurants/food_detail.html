@@ -18,7 +18,12 @@
 
                 <div class="col-">
                     {% if food_detail.qr_code %}
-                        <img class="img-fluid" src="{{ food_detail.qr_code.url }}">
+                            <div class="scan-qr-container">
+                                 <img class="qr-code" src="{{ food_detail.qr_code.url }}" alt="qrcode">
+                                <div class="middle">
+                                    <button class="read-qr btn btn-success" onclick="alert(value);" value="{{ food_detail.read_qr_code }}">Skanuj</button>
+                                </div>
+                            </div>
                     {% endif %}
                 </div>
             </div>
