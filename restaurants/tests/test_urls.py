@@ -27,7 +27,3 @@ class TestUrls(TestCase):
     def test_food_detail_url(self):
         url = reverse('food-detail', args=['test-slug'])
         self.assertEquals(resolve(url).func.view_class, FoodDetailView)
-
-
-
-

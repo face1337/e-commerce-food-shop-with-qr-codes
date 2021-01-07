@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 from pathlib import Path
 import os
 
-AUTH_USER_MODEL = "users.User"
+AUTH_USER_MODEL = "users.User"  # nazwa_aplikacji.Nazwa_modelu
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -34,7 +34,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'users.apps.UsersConfig',
+    'users.apps.UsersConfig', #
     'restaurants.apps.RestaurantsConfig',  # dodanie apki restaurants
     'orders.apps.OrdersConfig',
     'django.contrib.admin',

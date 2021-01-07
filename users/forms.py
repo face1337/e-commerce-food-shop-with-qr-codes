@@ -36,12 +36,12 @@ class AddressForm(forms.ModelForm):
 
 
 class AddressSelectionForm(forms.Form):
-    shipping_address = forms.ModelChoiceField(queryset=None, label="Adres dostawy")
+    address = forms.ModelChoiceField(queryset=None, label="Adres dostawy")
 
     def __init__(self, user, *args, **kwargs):
         super().__init__(*args, **kwargs)
         queryset = Address.objects.filter(user=user)
-        self.fields['shipping_address'].queryset = queryset
+        self.fields['address'].queryset = queryset
 
 
 class ValidateEmailForgotPassword(PasswordResetForm):

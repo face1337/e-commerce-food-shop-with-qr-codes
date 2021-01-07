@@ -33,16 +33,15 @@ class AddressAdmin(admin.ModelAdmin):
 admin.site.register(Address, AddressAdmin)
 
 
-@admin.register(User)
+@admin.register(User)  # rejestracja modelu użytkownika
 class UserAdmin(DjangoUserAdmin):
+    '''
+    Modyfikacja panelu administracyjnego, obsługującego użytkowników
+    '''
     fieldsets = (
         (None, {"fields": ("email", "password")}),
         (
-            "Personal info",
-            {"fields": ("first_name", "last_name")},
-        ),
-        (
-            "Permissions",
+            "Uprawnienia",
             {
                 "fields": (
                     "is_active",
@@ -54,7 +53,7 @@ class UserAdmin(DjangoUserAdmin):
             },
         ),
         (
-            "Important dates",
+            "Dodatkowe informacje o koncie",
             {"fields": ("last_login", "date_joined")},
         ),
     )

@@ -12,8 +12,8 @@
                             {% for form in formset %}
                                 <div class="row align-items-center">
                                     <div class="col">
-                                            {{ form.instance.food.name }}
-                                            <p class="text-muted">{{ form.instance.food.price }} zł</p>
+                                        {{ form.instance.food.name }}
+                                        <p class="text-muted">{{ form.instance.food.price }} zł</p>
                                     </div>
                                     <div class="col-3">
                                          {{ form|crispy }}

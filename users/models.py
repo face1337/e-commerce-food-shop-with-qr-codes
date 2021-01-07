@@ -5,7 +5,6 @@ from django.contrib.auth.models import (
     AbstractUser,
     BaseUserManager,
 )
-from django.core.files import File
 
 import segno
 from PIL import Image
@@ -18,13 +17,16 @@ from geopy.geocoders import Nominatim
 
 class UserManager(BaseUserManager):
     '''
-    Creating own user model, users will use email, not username.
+    Menedżer napisany w celu nadpisania istniejącego modelu użytkownika
     '''
     use_in_migrations = True
 
-    def _create_user(self, email, password, **extra_fields):
+    def _create_new_user(self, email, password, **extra_fields):
+        '''
+        metoda tworząca użytkownika, z której korzystają kolejne metody
+        '''
         if not email:
-            raise ValueError("The given email must be set")
+            raise ValueError("Pole email nie może być puste")
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
@@ -34,7 +36,7 @@ class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         extra_fields.setdefault("is_staff", False)
         extra_fields.setdefault("is_superuser", False)
-        return self._create_user(email, password, **extra_fields)
+        return self._create_new_user(email, password, **extra_fields)
 
     def create_superuser(self, email, password, **extra_fields):
         extra_fields.setdefault("is_staff", True)
@@ -42,13 +44,13 @@ class UserManager(BaseUserManager):
 
         if extra_fields.get("is_staff") is not True:
             raise ValueError(
-                "Superuser must have is_staff set to True"
+                "Superuser musi posiadać uprawnienia 'is_staff'"
             )
         if extra_fields.get("is_superuser") is not True:
             raise ValueError(
-                "Superuser must have is_superuser set to True"
+                "Superuser musi posiadać uprawnienia 'is_superuser'"
             )
-        return self._create_user(email, password, **extra_fields)
+        return self._create_new_user(email, password, **extra_fields)
 
 
 class User(AbstractUser):
@@ -76,10 +78,13 @@ class Address(models.Model):
 
     def __str__(self):
         if self.flat_number is not None:
-            return '{} {}/{}, {}, {} | {}'.format(self.address2, self.house_number, self.flat_number,
-                                                  self.address1, self.country, self.user)
+            return '{} {}/{}, {}, {} | {}'.format(self.address2, self.house_number,
+                                                  self.flat_number,self.address1,
+                                                  self.country, self.user)
         else:
-            return '{} {}, {}, {} | {}'.format(self.address2, self.house_number, self.address1, self.country, self.user)
+            return '{} {}, {}, {} | {}'.format(self.address2, self.house_number,
+                                               self.address1, self.country,
+                                               self.user)
 
     def image_tag(self):
         return mark_safe('<img src="/media/{}" width="150" height="150" />'.format(self.qr_code))
@@ -95,7 +100,6 @@ class Address(models.Model):
         )
 
     read_qr_code.short_description = 'Skanuj kod'
-
     image_tag.short_description = 'Kod QR'
 
     def get_address(self):
@@ -127,5 +131,5 @@ class Address(models.Model):
         qr_code_img.save(buffer, kind='png', light='#FFFFFF', scale=5)
         self.qr_code.save(f'{self.user}-qrcode.png', ContentFile(buffer.getvalue()), save=False)
         self.city_district = self.get_address_data().raw['address']['city_district']
-
+        print(self.get_address_data().raw)
         super().save(*args, **kwargs)

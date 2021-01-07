@@ -52,6 +52,10 @@ a:hover {
   background-color: #fafafa;
 }
 
+.navbar{
+  font-family: 'Lato', sans-serif;
+}
+
 .navbar-light .navbar-brand {
   color: #00693C;
 }

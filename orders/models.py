@@ -36,27 +36,27 @@ class Cart(models.Model):
 
     count.short_description = "Ilość: "
 
-    def make_order(self, shipping_address):
-        order_data = {
+    def make_order(self, address):
+        data_for_order_model = {
             "user": self.user,
-            "shipping_address1": shipping_address.address1,
-            "shipping_address2": shipping_address.address2,
-            "house_number": shipping_address.house_number,
-            "flat_number": shipping_address.flat_number,
-            "qr_code": shipping_address.qr_code,
-            "city_district": shipping_address.city_district,
+            "address1": address.address1,
+            "address2": address.address2,
+            "house_number": address.house_number,
+            "flat_number": address.flat_number,
+            "qr_code": address.qr_code,
+            "city_district": address.city_district,
             "total_price": self.get_total_price(),
         }
-        order = Order.objects.create(**order_data)
+        order = Order.objects.create(**data_for_order_model)
         products = []
         for line in self.cartline_set.all():
             for item in range(line.quantity):
-                order_line_data = {
+                items = {
                     "order": order,
                     "product": line.food,
                     "price": line.food.price,
                 }
-                order_line = OrderLine.objects.create(**order_line_data)
+                order_line = OrderLine.objects.create(**items)
                 products.append(line.food.name)
         message = 'Dziękujemy za złożenie zamówienia. \n' \
                   'Produkty które zamówiłeś to: \n \n' \
@@ -98,9 +98,9 @@ class CartLine(models.Model):
 
 class Order(models.Model):
     '''
-    Addresses are charfields, not foreign keys.
-    Inside class Cart there's a defined method (make_order) which copies contents of address model
-    That way if user deletes his addres, in order history there's still order to given address.
+    Adresy zostały zdefiniowane jako pola typu CharField, a nie klucz obcy, ponieważ metoda modelu Cart make_order(),
+    kopiuje informacje pól z modelu Address. Dzięki temu, jeśli użytkownik usunie swój adres dostawy, historia
+    zamówienia nadal posiada podany ówczas adres.
     '''
     class Meta:
         verbose_name = "zamówienie"
@@ -122,8 +122,8 @@ class Order(models.Model):
         max_length=15
     )
     total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name="Suma")
-    shipping_address1 = models.CharField(max_length=60, verbose_name="Miasto")
-    shipping_address2 = models.CharField(max_length=60, verbose_name="Ulica")
+    address1 = models.CharField(max_length=60, verbose_name="Miasto")
+    address2 = models.CharField(max_length=60, verbose_name="Ulica")
     house_number = models.CharField(max_length=60, verbose_name="Nr domu")
     flat_number = models.CharField(max_length=60, blank=True, verbose_name="Nr mieszkania")
     qr_code = models.ImageField(upload_to="order_qrcodes", blank=True, verbose_name="Kod QR")
@@ -159,7 +159,7 @@ class OrderLine(models.Model):
         verbose_name_plural = "Produkty"
 
     order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True)
-    product = models.ForeignKey(Food, on_delete=models.PROTECT, default=1, verbose_name="Produkt")  # if food deleted, order still in history
+    product = models.ForeignKey(Food, on_delete=models.PROTECT, default=1, verbose_name="Produkt")
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name="Koszt")
 
     def __str__(self):
