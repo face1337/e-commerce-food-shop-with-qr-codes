@@ -1,6 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import get_object_or_404, redirect
-from django.views.generic import ListView, DetailView
+from django.shortcuts import get_object_or_404
+from django.views.generic import ListView
 from django.views.generic.edit import (
     FormView,
     CreateView,
@@ -16,7 +16,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy, reverse
 
 from users import forms
-from .forms import AddressForm, AddressSelectionForm
+from .forms import AddressForm, SelectAddressForm
 from .models import Address
 from orders.models import OrderLine, Order
 
@@ -25,7 +25,7 @@ class RegisterView(FormView):
     template_name = 'users/register.html'
     form_class = forms.UserCreationForm
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs): # jeśli zalogowany użytkownik spróbuję dostać się na stronę rejestracji, zostanie przekierowany
         if self.request.user.is_authenticated:
             return HttpResponseRedirect(reverse_lazy('restaurants-index'))
         return super().get(request, *args, **kwargs)
@@ -36,18 +36,15 @@ class RegisterView(FormView):
 
     def form_valid(self, form):
         response = super().form_valid(form)
-        form.save()  # save user
+        form.save()  # zapisanie użytkownika
         email = form.cleaned_data.get("email")
         raw_password = form.cleaned_data.get("password1")
         user = authenticate(email=email, password=raw_password)
         login(self.request, user)
-
         form.send_mail()
-
         messages.info(
             self.request, "Zarejestrowano pomyślnie."
         )
-
         return response
 
 
@@ -58,17 +55,14 @@ class MyLoginView(auth_views.LoginView):
         return super().get(request, *args, **kwargs)
 
 
-class AddressListView(LoginRequiredMixin, ListView):
-    '''
-
-    '''
+class ListOfAddressesView(LoginRequiredMixin, ListView):
     model = Address
 
     def get_queryset(self):
         return self.model.objects.filter(user=self.request.user)
 
 
-class AddressCreateView(LoginRequiredMixin, CreateView):
+class CreateNewAddressView(LoginRequiredMixin, CreateView):
     model = Address
     template_name = 'users/address_form.html'
 
@@ -83,7 +77,7 @@ class AddressCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class AddressUpdateView(LoginRequiredMixin, UpdateView):
+class UpdateAddressView(LoginRequiredMixin, UpdateView):
     model = Address
     fields = [
         "address2",
@@ -97,7 +91,7 @@ class AddressUpdateView(LoginRequiredMixin, UpdateView):
         return self.model.objects.filter(user=self.request.user)
 
 
-class AddressDeleteView(LoginRequiredMixin, DeleteView):
+class DeleteAddressView(LoginRequiredMixin, DeleteView):
     model = Address
     success_url = reverse_lazy("users-address_list")
 
@@ -105,9 +99,9 @@ class AddressDeleteView(LoginRequiredMixin, DeleteView):
         return self.model.objects.filter(user=self.request.user)
 
 
-class AddressSelectView(LoginRequiredMixin, FormView):
+class SelectAddressView(LoginRequiredMixin, FormView):
     template_name = 'users/address_select.html'
-    form_class = AddressSelectionForm
+    form_class = SelectAddressForm
     success_url = reverse_lazy('restaurants-list')
 
     def get_form_kwargs(self):
@@ -123,7 +117,7 @@ class AddressSelectView(LoginRequiredMixin, FormView):
         del self.request.session['cart_id']  # if form is valid, delete items in cart
         cart = self.request.cart
         cart.user = self.request.user
-        cart.make_order(form.cleaned_data['shipping_address'])
+        cart.make_order(form.cleaned_data['address'])
         messages.info(
             self.request, "Pomyślnie złożono zamówienie. Aby sprawdzić jego status przejdź do zakładki 'zamówienia'."
         )

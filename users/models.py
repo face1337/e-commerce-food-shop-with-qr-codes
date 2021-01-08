@@ -131,5 +131,4 @@ class Address(models.Model):
         qr_code_img.save(buffer, kind='png', light='#FFFFFF', scale=5)
         self.qr_code.save(f'{self.user}-qrcode.png', ContentFile(buffer.getvalue()), save=False)
         self.city_district = self.get_address_data().raw['address']['city_district']
-        print(self.get_address_data().raw)
         super().save(*args, **kwargs)

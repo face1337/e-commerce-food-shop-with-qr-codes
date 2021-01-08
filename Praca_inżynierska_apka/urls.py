@@ -42,14 +42,14 @@ urlpatterns = [
     path('zresetuj-haslo/zakonczone', auth_views.PasswordResetCompleteView.as_view(
          template_name='users/password_reset_complete.html'), name='password_reset_complete'),
 
-    path('adres/',user_views.AddressListView.as_view(), name='users-address_list'),
-    path('adres/dodaj', user_views.AddressCreateView.as_view(), name='users-address_create'),
-    path('adres/<int:pk>/zaktualizuj', user_views.AddressUpdateView.as_view(), name='users-address_update'),
-    path('address/<int:pk>/delete', user_views.AddressDeleteView.as_view(), name='users-address_confirm_delete'),
+    path('adres/',user_views.ListOfAddressesView.as_view(), name='users-address_list'),
+    path('adres/dodaj', user_views.CreateNewAddressView.as_view(), name='users-address_create'),
+    path('adres/<int:pk>/zaktualizuj', user_views.UpdateAddressView.as_view(), name='users-address_update'),
+    path('address/<int:pk>/delete', user_views.DeleteAddressView.as_view(), name='users-address_confirm_delete'),
 
     path('dodaj-do-koszyka/', order_views.add_to_cart, name='orders-add_to_cart'),
     path('koszyk/', order_views.manage_cart, name='orders-cart'),
-    path('zamowienia/wybor-adresu-dostawy', user_views.AddressSelectView.as_view(), name='users-address_select'),
+    path('zamowienia/wybor-adresu-dostawy', user_views.SelectAddressView.as_view(), name='users-address_select'),
     path('zamowienia/<str:email>', user_views.UserOrdersListView.as_view(), name='orders-orders'),
     path('zamowienia/szczegoly-zamowienia/<int:pk>', user_views.ItemsInOrderListView.as_view(), name='orders-order_details'),
 

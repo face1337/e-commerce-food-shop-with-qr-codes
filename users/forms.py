@@ -35,7 +35,7 @@ class AddressForm(forms.ModelForm):
         fields = ("address2", "house_number", "flat_number")
 
 
-class AddressSelectionForm(forms.Form):
+class SelectAddressForm(forms.Form):
     address = forms.ModelChoiceField(queryset=None, label="Adres dostawy")
 
     def __init__(self, user, *args, **kwargs):
@@ -45,7 +45,7 @@ class AddressSelectionForm(forms.Form):
 
 
 class ValidateEmailForgotPassword(PasswordResetForm):
-    def clean_email(self):
+    def clean_email(self):  # sprawdzenie czy użytkownik już istnieje
         email = self.cleaned_data['email']
         if not User.objects.filter(email__iexact=email).exists():
             raise ValidationError("Użytkownik o podanym adresie e-mail nie jest zarejestrowany")
