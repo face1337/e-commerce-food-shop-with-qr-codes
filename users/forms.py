@@ -4,7 +4,7 @@ from django.core.mail import send_mail
 from django.contrib.auth.forms import UserCreationForm as UsrCreationForm, PasswordResetForm
 from django.contrib.auth.forms import UsernameField
 
-from .models import Address, User
+from .models import UserDeliveryInformation, User
 
 from . import models
 
@@ -31,8 +31,8 @@ class UserCreationForm(UsrCreationForm):
 
 class AddressForm(forms.ModelForm):
     class Meta:
-        model = Address
-        fields = ("address2", "house_number", "flat_number")
+        model = UserDeliveryInformation
+        fields = ("street", "house_number", "flat_number")
 
 
 class SelectAddressForm(forms.Form):
@@ -40,7 +40,7 @@ class SelectAddressForm(forms.Form):
 
     def __init__(self, user, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        queryset = Address.objects.filter(user=user)
+        queryset = UserDeliveryInformation.objects.filter(user=user)
         self.fields['address'].queryset = queryset
 
 

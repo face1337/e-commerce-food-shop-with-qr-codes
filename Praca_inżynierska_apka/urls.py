@@ -19,7 +19,6 @@ from django.urls import include, path
 
 from django.conf.urls.static import static
 from django.conf import settings
-from django.views.generic import TemplateView
 from users.forms import ValidateEmailForgotPassword
 
 from users import views as user_views
@@ -51,7 +50,8 @@ urlpatterns = [
     path('koszyk/', order_views.manage_cart, name='orders-cart'),
     path('zamowienia/wybor-adresu-dostawy', user_views.SelectAddressView.as_view(), name='users-address_select'),
     path('zamowienia/<str:email>', user_views.UserOrdersListView.as_view(), name='orders-orders'),
-    path('zamowienia/szczegoly-zamowienia/<int:pk>', user_views.ItemsInOrderListView.as_view(), name='orders-order_details'),
+    path('zamowienia/szczegoly-zamowienia/<int:pk>', user_views.ItemsInOrderListView.as_view(),
+         name='orders-order_details'),
 
     path('statystyki', order_views.StatisticsView.as_view(), name='orders-statistics'),
     path('', include('restaurants.urls')),

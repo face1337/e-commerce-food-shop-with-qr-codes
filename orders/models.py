@@ -8,7 +8,7 @@ from django.core.mail import send_mail
 from PIL import Image
 from pyzbar.pyzbar import decode
 
-from users.models import User, Address
+from users.models import User, UserDeliveryInformation
 from restaurants.models import Food
 
 
@@ -39,8 +39,8 @@ class Cart(models.Model):
     def make_order(self, address):
         data_for_order_model = {
             "user": self.user,
-            "address1": address.address1,
-            "address2": address.address2,
+            "city": address.city,
+            "street": address.street,
             "house_number": address.house_number,
             "flat_number": address.flat_number,
             "qr_code": address.qr_code,
@@ -99,7 +99,7 @@ class CartLine(models.Model):
 class Order(models.Model):
     '''
     Adresy zostały zdefiniowane jako pola typu CharField, a nie klucz obcy, ponieważ metoda modelu Cart make_order(),
-    kopiuje informacje pól z modelu Address. Dzięki temu, jeśli użytkownik usunie swój adres dostawy, historia
+    kopiuje informacje pól z modelu UserDeliveryInformation. Dzięki temu, jeśli użytkownik usunie swój adres dostawy, historia
     zamówienia nadal posiada podany ówczas adres.
     '''
     class Meta:
@@ -122,8 +122,8 @@ class Order(models.Model):
         max_length=15
     )
     total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name="Suma")
-    address1 = models.CharField(max_length=60, verbose_name="Miasto")
-    address2 = models.CharField(max_length=60, verbose_name="Ulica")
+    city = models.CharField(max_length=60, verbose_name="Miasto")
+    street = models.CharField(max_length=60, verbose_name="Ulica")
     house_number = models.CharField(max_length=60, verbose_name="Nr domu")
     flat_number = models.CharField(max_length=60, blank=True, verbose_name="Nr mieszkania")
     qr_code = models.ImageField(upload_to="order_qrcodes", blank=True, verbose_name="Kod QR")
@@ -135,10 +135,6 @@ class Order(models.Model):
         return mark_safe('<img src="/media/{}" width="150" height="150" />'.format(self.qr_code))
 
     def read_qr_code(self):
-        '''
-        https://www.programcreek.com/python/example/123813/pyzbar.pyzbar.decode
-        :return:
-        '''
         data = decode(Image.open(self.qr_code))
         return mark_safe(
             '<a href="{}" target="_blank">'

@@ -1,36 +1,36 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 
-from .models import Address, User
+from .models import UserDeliveryInformation, User
 
 # Register your models here.
 
 
-class AddressAdmin(admin.ModelAdmin):
+class UserDeliveryInformationAdmin(admin.ModelAdmin):
     fields = (
         'user',
         'image_tag',
         'read_qr_code',
-        'address2',
+        'street',
         'house_number',
         'flat_number',
-        'address1',
+        'city',
         'city_district'
     )
     readonly_fields = (
-        'address1',
+        'city',
         'image_tag',
         'read_qr_code',
-        'address2',
+        'street',
         'house_number',
         'flat_number',
         'city_district'
     )
 
-    list_display = ('user', 'address2', 'house_number', 'flat_number', 'address1')
+    list_display = ('user', 'street', 'house_number', 'flat_number', 'city')
 
 
-admin.site.register(Address, AddressAdmin)
+admin.site.register(UserDeliveryInformation, UserDeliveryInformationAdmin)
 
 
 @admin.register(User)  # rejestracja modelu użytkownika

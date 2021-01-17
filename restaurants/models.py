@@ -1,7 +1,7 @@
 from django.core.files.base import ContentFile
 from django.db import models
 from django.utils.safestring import mark_safe
-from users.models import Address
+from users.models import UserDeliveryInformation
 
 import segno
 from io import BytesIO

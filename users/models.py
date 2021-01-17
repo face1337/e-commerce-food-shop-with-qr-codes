@@ -63,13 +63,14 @@ class User(AbstractUser):
     objects = UserManager()
 
 
-class Address(models.Model):
+class UserDeliveryInformation(models.Model):
     class Meta:
+        verbose_name = "informacje o adresie"
         verbose_name_plural = "Adresy użytkowników"
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Użytkownik")
-    address1 = models.CharField("Miasto", max_length=60, default='Kraków', editable=False)  # locked for Kraków
-    address2 = models.CharField("Ulica", max_length=60)
+    city = models.CharField("Miasto", max_length=60, default='Kraków', editable=False)
+    street = models.CharField("Ulica", max_length=60)
     house_number = models.CharField("Nr bloku/domu", max_length=60)
     flat_number = models.CharField("Nr mieszkania", max_length=60, blank=True)
     city_district = models.CharField("Dzielnica", max_length=120, blank=True)
@@ -78,20 +79,18 @@ class Address(models.Model):
 
     def __str__(self):
         if self.flat_number is not None:
-            return '{} {}/{}, {}, {} | {}'.format(self.address2, self.house_number,
-                                                  self.flat_number,self.address1,
+            return '{} {}/{}, {}, {} | {}'.format(self.street, self.house_number,
+                                                  self.flat_number,self.city,
                                                   self.country, self.user)
         else:
-            return '{} {}, {}, {} | {}'.format(self.address2, self.house_number,
-                                               self.address1, self.country,
+            return '{} {}, {}, {} | {}'.format(self.street, self.house_number,
+                                               self.city, self.country,
                                                self.user)
 
     def image_tag(self):
         return mark_safe('<img src="/media/{}" width="150" height="150" />'.format(self.qr_code))
 
     def read_qr_code(self):
-        #https://www.programcreek.com/python/example/123813/pyzbar.pyzbar.decode
-
         data = decode(Image.open(self.qr_code))
         return mark_safe(
             '<a href="{}" target="_blank">'
@@ -103,7 +102,7 @@ class Address(models.Model):
     image_tag.short_description = 'Kod QR'
 
     def get_address(self):
-        return '{} {}, {}, {}'.format(self.address2, self.house_number, self.address1, self.country)
+        return '{} {}, {}, {}'.format(self.street, self.house_number, self.city, self.country)
 
     def get_address_data(self):
         '''

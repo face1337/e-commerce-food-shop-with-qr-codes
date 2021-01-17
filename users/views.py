@@ -17,7 +17,7 @@ from django.urls import reverse_lazy, reverse
 
 from users import forms
 from .forms import AddressForm, SelectAddressForm
-from .models import Address
+from .models import UserDeliveryInformation
 from orders.models import OrderLine, Order
 
 
@@ -56,14 +56,15 @@ class MyLoginView(auth_views.LoginView):
 
 
 class ListOfAddressesView(LoginRequiredMixin, ListView):
-    model = Address
+    model = UserDeliveryInformation
+    template_name = 'users/address_list.html'
 
     def get_queryset(self):
         return self.model.objects.filter(user=self.request.user)
 
 
 class CreateNewAddressView(LoginRequiredMixin, CreateView):
-    model = Address
+    model = UserDeliveryInformation
     template_name = 'users/address_form.html'
 
     form_class = AddressForm
@@ -78,9 +79,9 @@ class CreateNewAddressView(LoginRequiredMixin, CreateView):
 
 
 class UpdateAddressView(LoginRequiredMixin, UpdateView):
-    model = Address
+    model = UserDeliveryInformation
     fields = [
-        "address2",
+        "street",
         "house_number",
         "flat_number",
     ]
@@ -92,7 +93,8 @@ class UpdateAddressView(LoginRequiredMixin, UpdateView):
 
 
 class DeleteAddressView(LoginRequiredMixin, DeleteView):
-    model = Address
+    model = UserDeliveryInformation
+    template_name = 'users/address_confirm_delete.html'
     success_url = reverse_lazy("users-address_list")
 
     def get_queryset(self):
@@ -105,16 +107,12 @@ class SelectAddressView(LoginRequiredMixin, FormView):
     success_url = reverse_lazy('restaurants-list')
 
     def get_form_kwargs(self):
-        '''
-        extract the user form
-        :return: return user in dict
-        '''
         kwargs = super().get_form_kwargs()
         kwargs['user'] = self.request.user
         return kwargs
 
     def form_valid(self, form):
-        del self.request.session['cart_id']  # if form is valid, delete items in cart
+        del self.request.session['cart_id']
         cart = self.request.cart
         cart.user = self.request.user
         cart.make_order(form.cleaned_data['address'])

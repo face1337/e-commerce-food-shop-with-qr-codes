@@ -35,8 +35,8 @@ class OrderAdmin(admin.ModelAdmin):
             {
                 "fields": (
                             "city_district",
-                            "address1",
-                            "address2",
+                            "city",
+                            "street",
                             "house_number",
                             "flat_number",
                             "image_tag",
@@ -46,5 +46,5 @@ class OrderAdmin(admin.ModelAdmin):
         ),
         ("Całkowita wartośc zamówienia", {"fields": ("total_price",)}),
     )
-    readonly_fields = ('user', 'city_district', 'address1', 'address2', 'house_number',
+    readonly_fields = ('user', 'city_district', 'city', 'street', 'house_number',
                        'flat_number', 'image_tag', 'read_qr_code', 'total_price')

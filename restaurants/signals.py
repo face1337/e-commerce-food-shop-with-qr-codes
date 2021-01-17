@@ -18,7 +18,7 @@ def generate_thumbnail(sender, instance, **kwargs):
     image.save(temp_thumb, "JPEG")
     temp_thumb.seek(0)
 
-    # set save=False, otherwise there is an infinite loop
+    # ustawienie save na wartość False, w celu uniknięcia nieskończonej pętli
     instance.thumbnail.save(
         instance.image.name,
         ContentFile(temp_thumb.read()),

@@ -9,8 +9,8 @@
                 {% if address.qr_code %}
                     <img class="qr-code-thumbnail" src="{{ address.qr_code.url }}">
                 {% endif %}
-                    {{ address.address1 }}<br>
-                    {{ address.address2 }}<br>
+                    {{ address.city }}<br>
+                    {{ address.street }}<br>
                     {% if address.flat_number %}
                         {{ address.house_number }}/
                         {{ address.flat_number }}<br>
