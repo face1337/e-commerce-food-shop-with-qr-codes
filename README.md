@@ -1,6 +1,6 @@
 E-commerce shop - online meals delivery system with QR codes.
 
-<b> Application created as my engineering thesis </b>
+<b> Application created for my engineering thesis - <i>Development and implementation of online meal ordering system with QR code reader</i></b>
 
 This app allows users to order a meal and scan QR codes which return information such as glycemic index and calories of given dish.
 QR codes can be scaned by using a button or via smartphone scanner.
